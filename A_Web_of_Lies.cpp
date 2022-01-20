@@ -221,26 +221,51 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
+const int maxn = 200050;
+
+int grtcnt[maxn];
+int ans = 0;
 
 void solve() {
 
-  for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
-  int t;
-  cin >> t;
-  while (t--)
-  {
-   ll n;
-   cin >> n;
+  ll n,m;
+  cin >> n >> m;
 
-   ll a,na,c,nc,b;
+  while(m--){
+      ll u,v;
+      cin >> u >> v;
 
-   cin >> a >> na >> c >> nc >> b;
+      if(u > v)swap(u,v);
+      grtcnt[u]++;
 
-   ll diff = nc - na;
-
-   if((c - diff) >= b)cout << na << endl;
-   else cout << b - (c-diff) + na << endl;
+      if(grtcnt[u]==1)ans++;
   }
+
+  ll q;
+  cin >> q;
+
+  while(q--){
+      ll type;
+      cin >> type;
+
+      if(type == 1){
+          ll u,v;
+          cin >> u >> v;
+          if(u>v)swap(u,v);
+
+          grtcnt[u]++;
+          if(grtcnt[u]==1)ans++;
+      }else if(type == 2){
+          ll u,v;
+          cin >> u >> v;
+
+          if(u>v)swap(u,v);
+          grtcnt[u]--;
+
+          if(grtcnt[u]==0)ans--;
+      }else cout << n - ans << endl;
+  }
+  
 }
 
 int32_t main() {

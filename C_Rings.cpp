@@ -224,7 +224,7 @@ long long power(int base, int n, int mod)
 
 void solve() {
 
-  for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
+//   for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
   int t;
   cin >> t;
   while (t--)
@@ -232,14 +232,25 @@ void solve() {
    ll n;
    cin >> n;
 
-   ll a,na,c,nc,b;
+   string s;
+   cin >> s;
 
-   cin >> a >> na >> c >> nc >> b;
+   bool flag = true;
+   for(ll i=0;i<n;i++){
+       if(s[i] == '0'){
+           flag = false;
 
-   ll diff = nc - na;
+           if(i >= n/2){
+               cout << 1 << " " << i+1 << " " << 1 << " " << i << endl;
+               break;
+           }else{
+               cout << i+2 << " " << n << " " << i+1 << " " << n << endl;
+               break;
+           }
+       }
+   }
 
-   if((c - diff) >= b)cout << na << endl;
-   else cout << b - (c-diff) + na << endl;
+   if(flag)cout << 1 << " " << n-1 << " " << 2 << " " << n << endl;
   }
 }
 

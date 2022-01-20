@@ -232,14 +232,43 @@ void solve() {
    ll n;
    cin >> n;
 
-   ll a,na,c,nc,b;
+   vector<vector<ll>> values(2,vector<ll>(n));
 
-   cin >> a >> na >> c >> nc >> b;
+   vector<ll> onerowpre(n+1,0), tworowsuf(n+1,0);
 
-   ll diff = nc - na;
+   for(ll i=0;i<n;i++){
+       cin >> values[0][i];
 
-   if((c - diff) >= b)cout << na << endl;
-   else cout << b - (c-diff) + na << endl;
+       if(i != 0)onerowpre[i] = onerowpre[i-1] + values[0][i];
+       else onerowpre[i] = values[0][i];
+   }
+
+   for(ll i=0;i<n;i++){
+       cin >> values[1][i];
+   }
+
+   for(ll i=n-1;i>=0;i--){
+       tworowsuf[i] = tworowsuf[i+1] + values[1][i];
+   }
+
+//    tworowsuf[n] = tworowsuf[n-1];
+
+   ll ans = INT_MAX;
+
+   for(ll i=0;i<n;i++){
+    //    ll tempalice = onerowpre[i] + tworowsuf[i];
+
+       ll tempbob1 = (onerowpre[n-1] - onerowpre[i]);
+
+       ll tempbob2 =  (tworowsuf[0] - tworowsuf[i]);
+
+       ll curans = max(tempbob1,tempbob2);
+       ans = min(ans, curans );
+
+   }
+
+   cout << ans << endl;
+
   }
 }
 

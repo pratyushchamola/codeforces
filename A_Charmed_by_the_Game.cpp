@@ -224,22 +224,126 @@ long long power(int base, int n, int mod)
 
 void solve() {
 
-  for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
   int t;
   cin >> t;
   while (t--)
   {
-   ll n;
-   cin >> n;
 
-   ll a,na,c,nc,b;
+   ll a,b;
+   cin >> a >> b;
 
-   cin >> a >> na >> c >> nc >> b;
+   set<ll> ans;
 
-   ll diff = nc - na;
+   //when starts with A
 
-   if((c - diff) >= b)cout << na << endl;
-   else cout << b - (c-diff) + na << endl;
+   ll awinini = (a+b + 1)/2;
+   ll bwinini = a+b - awinini;
+
+   if(awinini > a){
+       ll cnt = awinini - a;
+       ans.insert(cnt);
+
+       ll possiblepairs;
+
+       if((a+b)%2 == 1)possiblepairs = (a+b) - (cnt + (cnt-1));
+       else possiblepairs = (a+b) - (2*cnt);
+
+       while(possiblepairs > 1){
+           cnt += 2;
+
+           ans.insert(cnt);
+
+           possiblepairs -= 2;
+       }
+   }else if(awinini < a){
+       ll cnt = bwinini - b;
+       ans.insert(cnt);
+
+       ll possiblepairs;
+
+       if((a+b)%2 == 1)possiblepairs = (a+b) - (2*cnt);
+       else possiblepairs = (a+b) - (2*cnt -1);
+
+       while(possiblepairs > 1){
+           cnt += 2;
+
+           ans.insert(cnt);
+
+           possiblepairs -= 2;
+       } 
+   }else{
+       ans.insert(0);
+
+       ll possiblepairs = (a+b);
+
+       ll cnt = 0;
+       while(possiblepairs > 1){
+           cnt += 2;
+           ans.insert(cnt);
+
+           possiblepairs -= 2;
+       }
+   }
+
+   // when starts with B
+   
+   bwinini = (a+b + 1)/2;
+   awinini = a+b - awinini;
+
+   if(bwinini > b){
+       ll cnt = bwinini - b;
+       ans.insert(cnt);
+
+       ll possiblepairs;
+
+       if((a+b)%2 == 1)possiblepairs = (a+b) - (cnt + (cnt-1));
+       else possiblepairs = (a+b) - (2*cnt);
+
+       while(possiblepairs > 1){
+           cnt += 2;
+
+           ans.insert(cnt);
+
+           possiblepairs -= 2;
+       }
+   }else if(bwinini < b){
+       ll cnt = awinini - a;
+       ans.insert(cnt);
+
+       ll possiblepairs;
+
+       if((a+b)%2 == 1)possiblepairs = (a+b) - (2*cnt);
+       else possiblepairs = (a+b) - (2*cnt -1);
+
+       while(possiblepairs > 1){
+           cnt += 2;
+
+           ans.insert(cnt);
+
+           possiblepairs -= 2;
+       } 
+   }else{
+       ans.insert(0);
+
+       ll possiblepairs = (a+b);
+       ll cnt = 0;
+       while(possiblepairs > 1){
+           cnt += 2;
+           ans.insert(cnt);
+
+           possiblepairs -= 2;
+       }
+   }
+
+
+   cout << ans.size() << endl;
+
+   for(auto child:ans){
+       cout << child << " ";
+   }
+
+   cout << endl;
+
   }
 }
 

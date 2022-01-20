@@ -232,14 +232,41 @@ void solve() {
    ll n;
    cin >> n;
 
-   ll a,na,c,nc,b;
+   vector<vector<ll>> values(n,vector<ll>(5,0)); 
 
-   cin >> a >> na >> c >> nc >> b;
+   for(ll i=0;i<n;i++){
+       for(ll j=0;j<5;j++){
+           cin >> values[i][j];
+       }
+   }
 
-   ll diff = nc - na;
+   ll ans = 0;
 
-   if((c - diff) >= b)cout << na << endl;
-   else cout << b - (c-diff) + na << endl;
+   for(ll i=1;i<n;i++){
+       int curans = 0;
+
+       for(ll j=0;j<5;j++){
+           if(values[i][j] < values[ans][j])curans++;
+       }
+
+       if(curans >= 3)ans = i;
+   }
+
+   for(ll i=0;i<n;i++){
+       if(i == ans)continue;
+
+       ll curans = 0;
+       for(ll j=0;j<5;j++){
+           if(values[i][j] < values[ans][j])curans++;
+       }
+
+       if(curans >= 3){
+           ans = -2;
+           break;
+       }
+   }
+
+   cout << ans + 1 << endl;
   }
 }
 

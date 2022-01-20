@@ -229,17 +229,30 @@ void solve() {
   cin >> t;
   while (t--)
   {
-   ll n;
-   cin >> n;
+   ll n,k;
+   cin >> n >> k;
+   string s;
+   cin >> s;
 
-   ll a,na,c,nc,b;
+   ll values[26] = {0};
 
-   cin >> a >> na >> c >> nc >> b;
+   for(ll i=0;i<n;i++){
+       values[s[i] - 'a']++;
+   } 
 
-   ll diff = nc - na;
+   ll cntpair = 0, cntodd = 0;
 
-   if((c - diff) >= b)cout << na << endl;
-   else cout << b - (c-diff) + na << endl;
+   for(ll i=0;i<26;i++){
+       cntpair += values[i]/2;
+       cntodd += values[i]%2;
+   }
+
+   ll ans = 2*(cntpair/k);
+   cntodd += 2*(cntpair%k);
+   
+   if(cntodd >= k)ans++;
+
+   cout << ans << endl;
   }
 }
 

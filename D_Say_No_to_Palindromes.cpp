@@ -224,22 +224,33 @@ long long power(int base, int n, int mod)
 
 void solve() {
 
-  for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
-  int t;
-  cin >> t;
-  while (t--)
-  {
-   ll n;
-   cin >> n;
+  ll n,m;
+  cin >> n >> m;
 
-   ll a,na,c,nc,b;
+  string s;
+  cin >> s;
 
-   cin >> a >> na >> c >> nc >> b;
+  vector<vector<ll>> totalcomb(6,vector<ll>(n+1,0));
 
-   ll diff = nc - na;
+  string temp = "abc";
+  ll k=0;
+  do{
+      for(ll i=0;i<n;i++){
+          totalcomb[k][i+1] = totalcomb[k][i] + (s[i] != temp[i%3]);
+      }
+      k++;
+  }while(next_permutation(temp.begin(),temp.end()));
 
-   if((c - diff) >= b)cout << na << endl;
-   else cout << b - (c-diff) + na << endl;
+  while(m--){
+      ll l,r;
+      cin >> l >> r;
+
+      ll ans = INT_MAX;
+      for(ll i=0;i<6;i++){
+          ans = min(ans,totalcomb[i][r] - totalcomb[i][l-1]);
+      }
+
+      cout << ans << endl;
   }
 }
 

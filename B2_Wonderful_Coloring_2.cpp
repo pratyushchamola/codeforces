@@ -221,6 +221,10 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
+const int maxsz = 200*1000 + 10;
+
+int ans[maxsz];
+map<ll,vector<ll>> values;
 
 void solve() {
 
@@ -229,17 +233,46 @@ void solve() {
   cin >> t;
   while (t--)
   {
-   ll n;
-   cin >> n;
+   ll n,k;
+   cin >> n >> k;
 
-   ll a,na,c,nc,b;
+   values.clear();
 
-   cin >> a >> na >> c >> nc >> b;
+   memset(ans,0,n*sizeof(ans[0]));
 
-   ll diff = nc - na;
+   ll curr;
+   for(ll i=0;i<n;i++){
+       cin >> curr;
 
-   if((c - diff) >= b)cout << na << endl;
-   else cout << b - (c-diff) + na << endl;
+       if(values[curr].size() < k){
+           values[curr].push_back(i);
+       } 
+   }
+
+   ll totaln = 0;
+
+   for(auto child:values){
+       totaln += child.second.size();
+   }
+
+   totaln -= totaln%k;
+
+   ll curcol = 0;
+
+   for(auto child:values){
+       for(auto curind: child.second){
+           ans[curind] = ++curcol;
+
+           curcol = curcol%k;
+
+           if(--totaln == 0)break;
+       }
+
+       if(totaln == 0)break;
+   }
+
+   for(ll i=0;i<n;i++)cout << ans[i] << " ";
+   cout << endl;
   }
 }
 

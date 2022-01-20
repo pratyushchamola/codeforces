@@ -222,6 +222,8 @@ long long power(int base, int n, int mod)
 }
 
 
+vector<ll> values[26];
+
 void solve() {
 
   for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
@@ -232,14 +234,46 @@ void solve() {
    ll n;
    cin >> n;
 
-   ll a,na,c,nc,b;
+   for(ll i=0;i<26;i++)values[i].clear();
 
-   cin >> a >> na >> c >> nc >> b;
+   for(ll i=0;i<n;i++){
+       string s;
+       cin >> s;
 
-   ll diff = nc - na;
+       ll curlen = -(int)s.length();
 
-   if((c - diff) >= b)cout << na << endl;
-   else cout << b - (c-diff) + na << endl;
+       for(ll i=0;i<26;i++)values[i].push_back(curlen);
+
+       for(auto child:s){
+           values[child - 'a'].back() += 2;
+       }
+   }
+
+   int ans = 0;
+   for(ll i=0;i<26;i++){
+       sort(values[i].begin(),values[i].end());
+       reverse(values[i].begin(),values[i].end());
+
+       auto& curr = values[i];
+
+       if(curr[0] <= 0)continue;
+
+       ll cursum = curr[0];
+
+       ll j=1;
+
+       for(;j<n && cursum > 0 ; j++){
+           cursum += curr[j];
+       }
+
+       if(cursum <= 0)j--;
+
+       if(j > ans){
+           ans = j;
+       }
+   }
+
+   cout << ans << endl; 
   }
 }
 

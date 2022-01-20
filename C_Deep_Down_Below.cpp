@@ -232,14 +232,50 @@ void solve() {
    ll n;
    cin >> n;
 
-   ll a,na,c,nc,b;
+   vector<pair<ll,ll>> powerof(n);
+   for(ll i=0;i<n;i++){
+       ll x;
+       cin >> x;
 
-   cin >> a >> na >> c >> nc >> b;
+       vector<ll> temp(x);
+       ll maxpow = -1;
+       for(ll j=0;j<x;j++){
+           cin >> temp[j];
 
-   ll diff = nc - na;
+           maxpow = max(maxpow,temp[j] - j + 1);
+       }
 
-   if((c - diff) >= b)cout << na << endl;
-   else cout << b - (c-diff) + na << endl;
+       powerof[i] = {maxpow,x};
+   }
+
+   sort(powerof.begin(),powerof.end());
+
+   ll l = powerof[0].first;
+   ll r = powerof[n-1].first; 
+
+   ll ans = 0;
+   while(l <= r){
+       ll mid = (l+r)>>1;
+       ll curmid = mid;
+       bool flag = true;
+       for(ll i=0;i<n;i++){
+           if(curmid >= powerof[i].first){
+               curmid += powerof[i].second;
+           }else{
+               flag = false;
+               break;
+           }
+       }
+
+       if(flag){
+           ans = mid;
+           r = mid -1;
+       }else{
+           l = mid+1;
+       }
+   }
+
+   cout << ans << endl;
   }
 }
 

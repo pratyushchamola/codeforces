@@ -222,6 +222,30 @@ long long power(int base, int n, int mod)
 }
 
 
+string s,tch;
+bool ans = false;
+
+void checkans(int sind,int tind,bool isrightpos){
+    if(tind == tch.size()){
+        if(sind >= 0 && sind < s.size()){
+            ans = true;
+            // return;
+        }
+        return;
+    }
+
+
+    if(sind > 0 && s[sind-1] == tch[tind]){
+        checkans(sind-1,tind+1,false);
+    }
+
+    if(sind < (s.size()-1) && s[sind + 1] == tch[tind] && isrightpos){
+        checkans(sind+1,tind+1,isrightpos);
+    }
+
+
+}
+
 void solve() {
 
   for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
@@ -229,17 +253,17 @@ void solve() {
   cin >> t;
   while (t--)
   {
-   ll n;
-   cin >> n;
+    ans = false;
+   cin >> s >> tch;
 
-   ll a,na,c,nc,b;
+   for(ll i=0;i<s.length();i++){
+       if(s[i] == tch[0]){
+           checkans(i,1,true);
+       }
+   }
 
-   cin >> a >> na >> c >> nc >> b;
-
-   ll diff = nc - na;
-
-   if((c - diff) >= b)cout << na << endl;
-   else cout << b - (c-diff) + na << endl;
+   if(ans)cout << "YES" << endl;
+   else cout << "NO" << endl;
   }
 }
 

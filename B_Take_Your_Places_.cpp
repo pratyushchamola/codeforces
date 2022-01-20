@@ -232,14 +232,82 @@ void solve() {
    ll n;
    cin >> n;
 
-   ll a,na,c,nc,b;
+   vector<ll> values(n), values2(n);
 
-   cin >> a >> na >> c >> nc >> b;
+   ll oddcnt = 0, evencnt = 0;
 
-   ll diff = nc - na;
+   for(ll i=0;i<n;i++){
+       cin >> values[i];
+    //    cin >> values2[i];
 
-   if((c - diff) >= b)cout << na << endl;
-   else cout << b - (c-diff) + na << endl;
+    values2[i] = values[i];
+
+       if(values[i]&1 == 1)oddcnt++;
+       else evencnt++;
+   } 
+
+   if(abs(oddcnt - evencnt) > 1){
+       cout << -1 << endl;
+       continue;
+   }
+
+   if(n==1){
+       cout << 0 << endl;
+       continue;
+   }
+
+   ll ans = INT_MAX;
+   ll curans = 0;
+   ll k=0;
+   bool flag = false;
+   for(ll i=0;i<n && (evencnt >= oddcnt) ;i++){
+       flag = true;
+       if((i%2 == 0 && values[i]%2==0) || (i%2==1 && values[i]%2==1)){
+           if(curans <= 0)curans = 0;
+           continue;
+       }
+
+    //    if(k <= i)k = i+1;
+        if(k<=i)k= i+1;
+       while(values[k]%2 == values[i]%2){
+           k++;
+       }
+
+    //    flag = true;
+       swap(values[k],values[i]);
+
+       curans += (k-i);
+
+   }
+
+
+   if(flag)ans = min(ans,curans);
+
+   k = 0;
+   flag = false;
+   curans = 0;
+   for(ll i=0;i<n && (oddcnt >= evencnt);i++){
+       flag = true;
+       if((i%2 == 0 && values2[i]%2==1) || (i%2==1 && values2[i]%2==0)){
+           if(curans<=0)curans = 0;
+           continue;
+       }
+
+       if(k<=i)k = i+1;
+
+       while(values2[k]%2 == values2[i]%2 )k++;
+
+    //    flag = true;
+       swap(values2[i],values2[k]);
+
+       curans += (k-i);
+   }
+
+   if(flag)ans = min(ans,curans);
+
+   if(ans == INT_MAX)ans = 0;
+
+   cout << ans << endl;
   }
 }
 

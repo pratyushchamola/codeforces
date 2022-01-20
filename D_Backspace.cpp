@@ -229,17 +229,34 @@ void solve() {
   cin >> t;
   while (t--)
   {
-   ll n;
-   cin >> n;
+   string s,tc;
+   cin >> s >> tc;
 
-   ll a,na,c,nc,b;
+   if(tc.length() > s.length()){
+       cout << "NO" << endl;
+       continue;
+   } 
+   ll sind = s.length()-1, tind = tc.length()-1;
 
-   cin >> a >> na >> c >> nc >> b;
+   bool flag = false;
+   string ans = "";
+   while(sind >= 0 && tind >= 0){
+       if(s[sind] == tc[tind]){
+           ans = s[sind] + ans;
+           sind--;
+           tind--;
+       }else{
+           sind -= 2;
+       }
+   }
 
-   ll diff = nc - na;
+   if(ans == tc){
+       cout << "YES" << endl;
+   }else{
+       cout << "NO" << endl;
+   }
 
-   if((c - diff) >= b)cout << na << endl;
-   else cout << b - (c-diff) + na << endl;
+
   }
 }
 
