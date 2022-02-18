@@ -229,32 +229,41 @@ void solve() {
   cin >> t;
   while (t--)
   {
-//    ll n;
-//    cin >> n;
-   string s;
-   cin >> s;
+   ll n,k;
+   cin >> n >> k;
 
-   int x[2] = {-1,-1};
+   vector<ll> values(n);
+   map<ll,ll> cnt, cntused;
+   for(ll i=0;i<n;i++){
+       cin >> values[i];
+       cnt[values[i]]++;
+   }
 
-   ll ans = 0;
+   sort(all(values));
+//    ll ans = 0;
+   ll sum = 0;
+   ll kk = k;
+   for(ll i=n-1;i>=0;i--){
+       if(kk>0){
+           sum += values[i];
+           cntused[values[i]]++;
+           kk--;
+       }else break;
+   }
 
-   for(ll i=0;i<s.length();i++){
-       int c = s[i] - '0';
+   ll ans = 1;
 
-       if(c == 1 || c==0){
-           x[c^(i%2)] = i;
+   for(auto child:cntused){
+       if(child.second < cnt[child.first]){
+           ll curval = binom(cnt[child.first],child.second);
+           curval = curval%MOD;
+
+           ans = moduloMultiplication(ans,curval);
        }
-
-       ll mn = min(x[0],x[1]);
-
-       ans += i - mn;
-
-       cout << "ans till " << i << " is : " << ans << endl;
-   } 
+   }
 
    cout << ans << endl;
 
-   cout << "------------------------------------" << endl;
   }
 }
 

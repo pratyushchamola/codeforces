@@ -229,32 +229,24 @@ void solve() {
   cin >> t;
   while (t--)
   {
-//    ll n;
-//    cin >> n;
-   string s;
-   cin >> s;
+   ll n,m,x;
+   cin >> n >> m >> x;
+   cout << "YES" << endl;
+   set<pair<ll,ll>> s;
 
-   int x[2] = {-1,-1};
+   for(ll i=1;i<=m;i++)s.insert({0,i});
+   ll curr;
+   for(ll i=0;i<n;i++){
+       cin >> curr;
 
-   ll ans = 0;
+       pair<ll,ll> curval = *s.begin();
+       s.erase(curval);
 
-   for(ll i=0;i<s.length();i++){
-       int c = s[i] - '0';
-
-       if(c == 1 || c==0){
-           x[c^(i%2)] = i;
-       }
-
-       ll mn = min(x[0],x[1]);
-
-       ans += i - mn;
-
-       cout << "ans till " << i << " is : " << ans << endl;
+       cout << curval.second << " ";
+       s.insert({curr +  curval.first,curval.second}); 
    } 
 
-   cout << ans << endl;
-
-   cout << "------------------------------------" << endl;
+   cout << endl;
   }
 }
 

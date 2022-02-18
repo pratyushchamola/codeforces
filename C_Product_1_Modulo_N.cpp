@@ -221,41 +221,30 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
+vector<ll> values(100001,0);
 
 void solve() {
 
-  for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
-  int t;
-  cin >> t;
-  while (t--)
-  {
-//    ll n;
-//    cin >> n;
-   string s;
-   cin >> s;
+  ll n;
+  cin >> n;
 
-   int x[2] = {-1,-1};
-
-   ll ans = 0;
-
-   for(ll i=0;i<s.length();i++){
-       int c = s[i] - '0';
-
-       if(c == 1 || c==0){
-           x[c^(i%2)] = i;
-       }
-
-       ll mn = min(x[0],x[1]);
-
-       ans += i - mn;
-
-       cout << "ans till " << i << " is : " << ans << endl;
-   } 
-
-   cout << ans << endl;
-
-   cout << "------------------------------------" << endl;
+  ll prod = 1;
+  for(ll i=0;i<n;i++){
+      if(gcd(i,n) == 1){
+          values[i] = 1;
+          prod = (prod*i)%n;
+      }
   }
+
+  if(prod != 1)values[prod] = 0;
+  cout << count(values.begin(),values.end(),1) << endl;
+
+  for(ll i=0;i<n;i++){
+      if(values[i])cout << i << " ";
+  }
+
+  cout << endl;
+
 }
 
 int32_t main() {

@@ -221,40 +221,82 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
+const ll maxn = 300004;
+vector<ll> check[maxn];
 
 void solve() {
 
-  for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
   int t;
   cin >> t;
   while (t--)
   {
-//    ll n;
-//    cin >> n;
-   string s;
-   cin >> s;
+   ll n,m;
+   cin >> n >> m; 
 
-   int x[2] = {-1,-1};
+   for(ll i=1;i<=n;i++)check[i].clear();
 
-   ll ans = 0;
+   vector<ll> a(n), b(n);
 
-   for(ll i=0;i<s.length();i++){
-       int c = s[i] - '0';
+   for(ll i=0;i<n;i++)cin >> a[i];
 
-       if(c == 1 || c==0){
-           x[c^(i%2)] = i;
+   for(ll i=0;i<n;i++){
+       cin >> b[i];
+
+       if(b[i] != a[i]){
+           check[b[i]].push_back(i);
        }
+   }
 
-       ll mn = min(x[0],x[1]);
+   vector<ll> colors(m);
 
-       ans += i - mn;
+   for(ll i=0;i<m;i++)cin >> colors[i];
 
-       cout << "ans till " << i << " is : " << ans << endl;
-   } 
+   ll l = -1;
 
-   cout << ans << endl;
+   if(check[colors[m-1]].size() > 0){
+       l = check[colors[m-1]].back();
+       check[colors[m-1]].pop_back();
+   }else{
+       for(ll i=0;i<n;i++){
+           if(b[i] == colors[m-1]){
+               l = i;
+               break;
+           }
+       }
+   }
 
-   cout << "------------------------------------" << endl;
+   if(l == -1){
+       cout << "NO" << endl;
+       continue;
+   }
+
+   vector<ll> answer(m,0);
+   answer[m-1] = l;
+
+   for(ll i=0;i<m-1;i++){
+       if((int)check[colors[i]].size() == 0)answer[i] = l;
+       else{
+           answer[i] = check[colors[i]].back();
+           check[colors[i]].pop_back();
+       }
+   }
+
+   bool flag = false;
+   for(ll i=1;i<=n;i++){
+       if((int)check[i].size() > 0){
+           flag = true;
+           break;
+       }
+   }
+
+   if(flag)cout << "NO" << endl;
+   else{
+       cout << "YES" << endl;
+
+       for(ll child:answer)cout << child+1 << " ";
+       cout << endl;
+   }
+
   }
 }
 

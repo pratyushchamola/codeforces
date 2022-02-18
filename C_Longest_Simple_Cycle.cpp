@@ -229,32 +229,31 @@ void solve() {
   cin >> t;
   while (t--)
   {
-//    ll n;
-//    cin >> n;
-   string s;
-   cin >> s;
+   ll n;
+   cin >> n;
 
-   int x[2] = {-1,-1};
+   vector<ll> a(n), b(n), c(n);
 
+   for(ll i=0;i<n;i++)cin >> c[i];
+
+   for(ll i=0;i<n;i++)cin >> b[i];
+
+   for(ll i=0;i<n;i++)cin>> a[i];
+
+   ll curlen = 0;
    ll ans = 0;
+   ll prevans = 0;
+   for(ll i=1;i<n;i++){
+       curlen = c[i] + abs(a[i] - b[i]) + 1ll;
 
-   for(ll i=0;i<s.length();i++){
-       int c = s[i] - '0';
+       if(a[i] != b[i])curlen = max(curlen,(c[i] + 1ll + prevans - abs(a[i] - b[i])));
 
-       if(c == 1 || c==0){
-           x[c^(i%2)] = i;
-       }
+       ans = max(ans,curlen);
 
-       ll mn = min(x[0],x[1]);
-
-       ans += i - mn;
-
-       cout << "ans till " << i << " is : " << ans << endl;
+       prevans = curlen;
    } 
 
    cout << ans << endl;
-
-   cout << "------------------------------------" << endl;
   }
 }
 

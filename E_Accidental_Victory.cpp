@@ -229,32 +229,39 @@ void solve() {
   cin >> t;
   while (t--)
   {
-//    ll n;
-//    cin >> n;
-   string s;
-   cin >> s;
+      ll n;
+      cin >> n;
 
-   int x[2] = {-1,-1};
+      vector<pair<ll,ll>> values(n);
 
-   ll ans = 0;
+      for(ll i=0;i<n;i++){
+          cin >> values[i].first;
 
-   for(ll i=0;i<s.length();i++){
-       int c = s[i] - '0';
+          values[i].second = i;
+      } 
 
-       if(c == 1 || c==0){
-           x[c^(i%2)] = i;
-       }
+      sort(values.begin(),values.end());
 
-       ll mn = min(x[0],x[1]);
+      vector<ll> incresum(n+1,0);
 
-       ans += i - mn;
+      for(ll i=0;i<n;i++){
+          incresum[i+1] = incresum[i] + values[i].first;
+      }
 
-       cout << "ans till " << i << " is : " << ans << endl;
-   } 
+      set<ll> answer;
+      answer.insert(values[n-1].second);
 
-   cout << ans << endl;
+      for(ll i=n-2;i>=0;i--){
+          if(incresum[i+1] >= values[i+1].first)answer.insert(values[i].second);
+          else break;
+      }
 
-   cout << "------------------------------------" << endl;
+      cout << answer.size() << endl;
+
+      for(auto child:answer)cout << child+1 << " ";
+
+      cout << endl;
+
   }
 }
 

@@ -10,7 +10,7 @@ using namespace chrono;
 #define MOD 1000000007
 #define MOD1 998244353
 #define INF 1e18
-#define endl "\n"
+// #define endl "\n"
 #define pb push_back
 #define ppb pop_back
 #define mp make_pair
@@ -222,40 +222,41 @@ long long power(int base, int n, int mod)
 }
 
 
+int ask(ll st,ll ed){
+    if(st >= ed)return -1;
+
+    cout << "? " << st+1 << " " << ed+1 << endl;
+    int ans;
+    cin >> ans;
+
+    return ans-1;
+}
+
 void solve() {
 
-  for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
-  int t;
-  cin >> t;
-  while (t--)
-  {
-//    ll n;
-//    cin >> n;
-   string s;
-   cin >> s;
+  ll n;
+  cin >> n;
 
-   int x[2] = {-1,-1};
+  ll l = 0, r = n;
 
-   ll ans = 0;
+  while( r - l > 1){
+      ll mid = (r+l)>>1;
+      ll smax = ask(l,r-1);
 
-   for(ll i=0;i<s.length();i++){
-       int c = s[i] - '0';
-
-       if(c == 1 || c==0){
-           x[c^(i%2)] = i;
-       }
-
-       ll mn = min(x[0],x[1]);
-
-       ans += i - mn;
-
-       cout << "ans till " << i << " is : " << ans << endl;
-   } 
-
-   cout << ans << endl;
-
-   cout << "------------------------------------" << endl;
+      if(smax < mid){
+          if(smax == ask(l,mid-1)){
+              r = mid;
+          }else l = mid;
+      }else{
+          if(smax == ask(mid,r-1)){
+              l = mid;
+          }else{
+              r = mid;
+          }
+      }
   }
+
+  cout << "! " << r << endl;
 }
 
 int32_t main() {

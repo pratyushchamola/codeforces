@@ -229,32 +229,36 @@ void solve() {
   cin >> t;
   while (t--)
   {
-//    ll n;
-//    cin >> n;
-   string s;
-   cin >> s;
+   ll n;
+   cin >> n;
 
-   int x[2] = {-1,-1};
+   vector<ll> values(n);
+   for(ll i=0;i<n;i++)cin >> values[i]; 
 
-   ll ans = 0;
+   ll minx = *min_element(values.begin(),values.end());
 
-   for(ll i=0;i<s.length();i++){
-       int c = s[i] - '0';
+   ll cnt = 0;
+   bool flag = false;
+   for(ll i=0;i<n;i++){
+       if(values[i] == minx)cnt++;
 
-       if(c == 1 || c==0){
-           x[c^(i%2)] = i;
+       if((values[i]&minx) != minx){
+           flag = true;
+           break;
        }
+   }
 
-       ll mn = min(x[0],x[1]);
+   if(flag){
+       cout << 0 << endl;
+       continue;
+   }
 
-       ans += i - mn;
+   ll ans = mod_mul(cnt,cnt-1,MOD);
 
-       cout << "ans till " << i << " is : " << ans << endl;
-   } 
+   ans = mod_mul(ans,fact[n-2],MOD);
 
    cout << ans << endl;
 
-   cout << "------------------------------------" << endl;
   }
 }
 

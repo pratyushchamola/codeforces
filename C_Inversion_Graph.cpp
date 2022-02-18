@@ -229,32 +229,30 @@ void solve() {
   cin >> t;
   while (t--)
   {
-//    ll n;
-//    cin >> n;
-   string s;
-   cin >> s;
+   ll n;
+   cin >> n;
+   vector<ll> values(n+1);
+   set<ll> maxelements;
+   ll largest = 0;
+   for(ll i=1;i<=n;i++){
+       cin >> values[i];
 
-   int x[2] = {-1,-1};
+       largest = max(largest,values[i]);
 
-   ll ans = 0;
-
-   for(ll i=0;i<s.length();i++){
-       int c = s[i] - '0';
-
-       if(c == 1 || c==0){
-           x[c^(i%2)] = i;
+       auto it = maxelements.lower_bound(values[i]);
+       vector<ll> rm;
+       for(; it != maxelements.end();it++){
+           rm.push_back(*it);
        }
 
-       ll mn = min(x[0],x[1]);
+       for(auto child:rm){
+           maxelements.erase(maxelements.find(child));
+       }
 
-       ans += i - mn;
-
-       cout << "ans till " << i << " is : " << ans << endl;
+       maxelements.insert(largest);
    } 
 
-   cout << ans << endl;
-
-   cout << "------------------------------------" << endl;
+   cout << (int)maxelements.size() << endl;
   }
 }
 

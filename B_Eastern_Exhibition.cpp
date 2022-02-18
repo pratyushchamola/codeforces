@@ -229,32 +229,22 @@ void solve() {
   cin >> t;
   while (t--)
   {
-//    ll n;
-//    cin >> n;
-   string s;
-   cin >> s;
+   ll n;
+   cin >> n;
 
-   int x[2] = {-1,-1};
+   vector<ll> x(n), y(n);
 
-   ll ans = 0;
+   for(ll i=0;i<n;i++)cin >> x[i] >> y[i];
 
-   for(ll i=0;i<s.length();i++){
-       int c = s[i] - '0';
+   sort(x.begin(),x.end());
+   sort(y.begin(),y.end());
 
-       if(c == 1 || c==0){
-           x[c^(i%2)] = i;
-       }
+   ll ans = x[x.size()/2] - x[(x.size()-1)>>1] + 1;
 
-       ll mn = min(x[0],x[1]);
-
-       ans += i - mn;
-
-       cout << "ans till " << i << " is : " << ans << endl;
-   } 
+   ans *= (y[y.size()>>1] - y[(y.size()-1)>>1] + 1);
 
    cout << ans << endl;
 
-   cout << "------------------------------------" << endl;
   }
 }
 

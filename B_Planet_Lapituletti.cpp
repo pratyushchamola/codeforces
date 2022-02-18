@@ -222,39 +222,62 @@ long long power(int base, int n, int mod)
 }
 
 
+
+vector<ll> vals = {0,1,5,-1,-1,2,-1,-1,8,-1};
+
+int get(int n){
+    string s = to_string(n);
+
+    if((int)s.size() == 1)s = "0" + s;
+    string ans = "";
+    for(ll i=1;i>=0;i--){
+        if(vals[s[i] -'0'] == -1)return INT_MAX;
+        ans += char(vals[s[i] - '0'] + '0');
+    }
+
+    return stoi(ans);
+}
+
+string getstr(int val){
+    string ans = to_string(val);
+
+    if(val < 10)ans = "0" + ans;
+
+    return ans;
+}
+
 void solve() {
 
-  for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
+//   for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
   int t;
   cin >> t;
+  ll H,M,h,m;
+  string s;
   while (t--)
   {
-//    ll n;
-//    cin >> n;
-   string s;
+   cin >> H >> M; 
+   
    cin >> s;
 
-   int x[2] = {-1,-1};
+   h = (s[0]-'0')*10 + (s[1] - '0');
+   m = (s[3]-'0')*10 + (s[4] - '0');
 
-   ll ans = 0;
-
-   for(ll i=0;i<s.length();i++){
-       int c = s[i] - '0';
-
-       if(c == 1 || c==0){
-           x[c^(i%2)] = i;
+   while(true){
+       if(m==M){
+           m = 0;
+           h++;
+       }
+       if(h==H){
+           h=0;
        }
 
-       ll mn = min(x[0],x[1]);
+       if(get(m) < H && get(h) < M){
+           cout << getstr(h) << ":" << getstr(m) << endl;
+           break;
+       }
+       m++;
 
-       ans += i - mn;
-
-       cout << "ans till " << i << " is : " << ans << endl;
-   } 
-
-   cout << ans << endl;
-
-   cout << "------------------------------------" << endl;
+   }
   }
 }
 

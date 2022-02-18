@@ -229,32 +229,35 @@ void solve() {
   cin >> t;
   while (t--)
   {
-//    ll n;
-//    cin >> n;
-   string s;
-   cin >> s;
+   ll n, m;
+   cin >> n >> m;
 
-   int x[2] = {-1,-1};
+   vector<ll> k(n), prices(m);
+
+   for(ll i=0;i<n;i++){
+       cin >> k[i];
+       k[i]--;
+   }
+   for(ll i=0;i<m;i++)cin >> prices[i];
+
+   sort(all(k));
 
    ll ans = 0;
 
-   for(ll i=0;i<s.length();i++){
-       int c = s[i] - '0';
+   for(ll i=0;i<n;i++)ans += prices[k[i]];
 
-       if(c == 1 || c==0){
-           x[c^(i%2)] = i;
-       }
+   ll l = 0;
 
-       ll mn = min(x[0],x[1]);
+   for(ll i=n-1;i>=0;i--){
+       if(l <= k[i]){
+           ans -= prices[k[i]];
 
-       ans += i - mn;
-
-       cout << "ans till " << i << " is : " << ans << endl;
-   } 
+           ans += prices[l];
+           l++;
+       }else break;
+   }
 
    cout << ans << endl;
-
-   cout << "------------------------------------" << endl;
   }
 }
 

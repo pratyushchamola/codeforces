@@ -224,38 +224,21 @@ long long power(int base, int n, int mod)
 
 void solve() {
 
-  for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
-  int t;
-  cin >> t;
-  while (t--)
-  {
-//    ll n;
-//    cin >> n;
-   string s;
-   cin >> s;
+    string s;
+    cin >> s;
 
-   int x[2] = {-1,-1};
+    while(s.size() != 1){
+        // string temp = "";
+        ll tempsum = 0;
+        // cout << s << endl;
+        for(ll i=0;i<s.size();i++){
+            tempsum += (s[i] - '0');
+        }
 
-   ll ans = 0;
+        s = to_string(tempsum);
+    }
 
-   for(ll i=0;i<s.length();i++){
-       int c = s[i] - '0';
-
-       if(c == 1 || c==0){
-           x[c^(i%2)] = i;
-       }
-
-       ll mn = min(x[0],x[1]);
-
-       ans += i - mn;
-
-       cout << "ans till " << i << " is : " << ans << endl;
-   } 
-
-   cout << ans << endl;
-
-   cout << "------------------------------------" << endl;
-  }
+    cout << s << endl;
 }
 
 int32_t main() {

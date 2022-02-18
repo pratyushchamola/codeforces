@@ -229,32 +229,55 @@ void solve() {
   cin >> t;
   while (t--)
   {
-//    ll n;
-//    cin >> n;
-   string s;
-   cin >> s;
+    ll n;
+    cin >> n;
 
-   int x[2] = {-1,-1};
+    vector<ll> values(n), valcnt;
+    map<ll,ll> cnt;
+    for(ll i=0;i<n;i++){
+        cin >> values[i];
 
-   ll ans = 0;
+        cnt[values[i]]++;
+    } 
 
-   for(ll i=0;i<s.length();i++){
-       int c = s[i] - '0';
+    set<ll> uniquefreq;
+    for(auto child:cnt){
+        valcnt.push_back(child.second);
 
-       if(c == 1 || c==0){
-           x[c^(i%2)] = i;
-       }
+        uniquefreq.insert(child.second);
+    }
 
-       ll mn = min(x[0],x[1]);
+    sort(valcnt.begin(),valcnt.end());
 
-       ans += i - mn;
+    vector<ll> answer(uniquefreq.size());
 
-       cout << "ans till " << i << " is : " << ans << endl;
-   } 
+    int k=0;
+    for(auto child:uniquefreq){
+        ll ind = upper_bound(valcnt.begin(),valcnt.end(),child) - valcnt.begin();
 
-   cout << ans << endl;
+        for(ll i=ind;i<valcnt.size();i++){
+            answer[k] += (valcnt[i] - child);
+        }
+        k++;
+    }
 
-   cout << "------------------------------------" << endl;
+    for(ll i=0;i<valcnt.size();i++){
+        valcnt[i] = -valcnt[i];
+    }
+
+    sort(valcnt.begin(),valcnt.end());
+
+    k = 0;
+    for(auto child:uniquefreq){
+        ll ind = upper_bound(valcnt.begin(),valcnt.end(),-child) - valcnt.begin();
+
+        for(ll i=ind;i<valcnt.size();i++){
+            answer[k] += (-valcnt[i]);
+        }
+        k++;
+    }
+
+    cout << *min_element(answer.begin(),answer.end()) << endl;
   }
 }
 

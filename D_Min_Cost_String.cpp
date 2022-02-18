@@ -224,38 +224,50 @@ long long power(int base, int n, int mod)
 
 void solve() {
 
-  for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
-  int t;
-  cin >> t;
-  while (t--)
-  {
-//    ll n;
-//    cin >> n;
-   string s;
-   cin >> s;
+  ll n;
+  cin >> n;
+  ll k;
+  cin >> k;
+  
+  string s = "";
 
-   int x[2] = {-1,-1};
+      for(ll col = 0;col < k; col++){
+          s += ('a'+col);
+          s += ('a'+col);
+      }
 
-   ll ans = 0;
+      for(ll col=k-1;col>0;col--){
+          s += 'a';
+          for(ll row=1;row<col;row++){
+              s += ('a' + col);
+              s += ('a' + row);
+          }
+      }
 
-   for(ll i=0;i<s.length();i++){
-       int c = s[i] - '0';
+    //   cout << s.size() << endl;
 
-       if(c == 1 || c==0){
-           x[c^(i%2)] = i;
-       }
+      if(n <=s.size()){
+          string ans = s.substr(0,n);
+          cout << ans << endl;
+      }else{
+          string ans = "";
 
-       ll mn = min(x[0],x[1]);
+          while(ans.size() < n){
 
-       ans += i - mn;
+              // so that no triplets of alphabets occurs, such that in 32 2, aabba + aabba = aabbaaabba, which is wrong as cost increses
+              if(s[0] == s[s.size()-1]){
+                  ans += s.substr(0,s.size()-1);
+              }else{
+                  ans += s;
+              }
+          }
 
-       cout << "ans till " << i << " is : " << ans << endl;
-   } 
+        //   ll i=0;
+        //   while(ans.size() < n)ans += s[i++];
+        ans = ans.substr(0,n);
+          cout << ans << endl;
+      }
 
-   cout << ans << endl;
-
-   cout << "------------------------------------" << endl;
-  }
 }
 
 int32_t main() {

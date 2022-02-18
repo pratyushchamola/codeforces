@@ -229,32 +229,79 @@ void solve() {
   cin >> t;
   while (t--)
   {
-//    ll n;
-//    cin >> n;
+   ll a,b;
+   cin >> a >> b;
+
    string s;
    cin >> s;
 
-   int x[2] = {-1,-1};
+   // if both present and different
+   bool flag = false;
+   for(ll i=0;i<s.size();i++){
+       ll j= s.size() -1 - i;
 
-   ll ans = 0;
-
-   for(ll i=0;i<s.length();i++){
-       int c = s[i] - '0';
-
-       if(c == 1 || c==0){
-           x[c^(i%2)] = i;
+       if((s[i] != '?' && s[j] != '?') && (s[i] != s[j])){
+           flag = true;
+           break;
        }
+   }
 
-       ll mn = min(x[0],x[1]);
-
-       ans += i - mn;
-
-       cout << "ans till " << i << " is : " << ans << endl;
+   if(flag){
+       cout << -1 << endl;
+       continue;
    } 
 
-   cout << ans << endl;
+   // making pairs of already existing values
 
-   cout << "------------------------------------" << endl;
+   for(ll i=0;i<s.size();i++){
+       ll j = s.size() - i - 1;
+
+       if(s[i] != '?' && s[j] == '?'){
+           s[j] = s[i];
+       }else if(s[i] == '?' && s[j] != '?'){
+           s[i] = s[j];
+       }
+   }
+   
+
+   // decrease a and b;
+
+   for(ll i=0;i<s.size();i++){
+       if(s[i] == '0')a--;
+       else if(s[i] == '1')b--;
+   }
+
+   if(a<0 || b<0){
+       cout << -1 << endl;
+       continue;
+   }
+
+   for(ll i=0;i<s.size();i++){
+       ll j = s.size() -1 - i;
+       if(s[i] == '?' and s[j] == '?'){
+           if( i != j){
+               if((a > 0) && (a%2 == 0)){
+                   s[i] = s[j] = '0';
+                   a -= 2;
+               }else if((b>0) && (b%2 == 0)){
+                   s[i] = s[j] = '1';
+                   b -= 2;
+               }
+           }else {
+               if(a%2 == 1){
+                   s[i] = '0';
+                    a -= 1;
+               }else if(b%2 == 1){
+                   s[i] = '1';
+                   b -= 1;
+               }
+           }
+       }
+   }
+
+   if((a != 0) || (b != 0))cout << -1 << endl;
+   else cout << s << endl;
+
   }
 }
 

@@ -229,32 +229,36 @@ void solve() {
   cin >> t;
   while (t--)
   {
-//    ll n;
-//    cin >> n;
-   string s;
-   cin >> s;
+   ll n,k;
+   cin >> n >> k;
 
-   int x[2] = {-1,-1};
+   vector<ll> values(n);
 
-   ll ans = 0;
+   for(ll i=0;i<n;i++)cin >> values[i];
 
-   for(ll i=0;i<s.length();i++){
-       int c = s[i] - '0';
+   bool flag = true;
 
-       if(c == 1 || c==0){
-           x[c^(i%2)] = i;
+   ll minh = values[0];
+   ll maxh = values[0];
+
+   for(ll i=1;i<n;i++){
+       minh = max(minh - k + 1,values[i]);
+       maxh = min(maxh + k - 1, values[i] + k - 1);
+
+       if(minh > maxh){
+           flag = false;
+           break;
        }
 
-       ll mn = min(x[0],x[1]);
+   }
 
-       ans += i - mn;
+//    cout << flag << endl;
+//    if(!((values[n-1] < minh) && (values[n-1] < maxh)))flag = false;
+    if((values[n-1] < minh) || (values[n-1] > maxh))flag = false;
 
-       cout << "ans till " << i << " is : " << ans << endl;
-   } 
-
-   cout << ans << endl;
-
-   cout << "------------------------------------" << endl;
+   if(flag)cout << "YES" << endl;
+   else cout << "NO" << endl;
+    
   }
 }
 

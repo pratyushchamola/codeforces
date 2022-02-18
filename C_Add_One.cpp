@@ -221,40 +221,40 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
+const int maxm = 200005;
+// const int maxn = 1e9 + 1;
+
+  ll dp[maxm];
 
 void solve() {
 
-  for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
   int t;
   cin >> t;
+
+  for(ll i=0;i<9;i++)dp[i] = 2;
+  dp[9] = 3;
+
+  for(ll i=10;i<maxm;i++){
+      dp[i] = (dp[i-9] + dp[i-10])%MOD;
+  }
+
   while (t--)
   {
-//    ll n;
-//    cin >> n;
-   string s;
-   cin >> s;
-
-   int x[2] = {-1,-1};
+   ll n, m;
+   cin >> n >> m;
 
    ll ans = 0;
+   while(n > 0){
+       ll curr = n%10;
+       ans += ((curr + m) < 10) ?  1 : dp[curr + m - 10];
 
-   for(ll i=0;i<s.length();i++){
-       int c = s[i] - '0';
+       ans %= MOD;
 
-       if(c == 1 || c==0){
-           x[c^(i%2)] = i;
-       }
-
-       ll mn = min(x[0],x[1]);
-
-       ans += i - mn;
-
-       cout << "ans till " << i << " is : " << ans << endl;
-   } 
+       n /= 10;
+   }
 
    cout << ans << endl;
 
-   cout << "------------------------------------" << endl;
   }
 }
 

@@ -229,32 +229,66 @@ void solve() {
   cin >> t;
   while (t--)
   {
-//    ll n;
-//    cin >> n;
-   string s;
-   cin >> s;
+   ll n,u,r,d,l;
+   cin >> n >> u >> r >> d >> l;
 
-   int x[2] = {-1,-1};
+   ll u1 = u, r1 = r , d1 = d, l1 = l;
 
-   ll ans = 0;
+   if(u==n){
+       l1--;
+       r1--;
+   }
 
-   for(ll i=0;i<s.length();i++){
-       int c = s[i] - '0';
+   if(d==n){
+       l1--;
+       r1--;
+   }
 
-       if(c == 1 || c==0){
-           x[c^(i%2)] = i;
+   if(l==n){
+       u1--;
+       d1--;
+   }
+
+   if(r==n){
+       u1--;
+       d1--;
+   }
+
+   if(u==n-1){
+       if(r1>l1){
+           r1--;
+       }else{
+           l1--;
        }
+   }
 
-       ll mn = min(x[0],x[1]);
+   if(d==n-1){
+       if(r1>l1){
+           r1--;
+       }else{
+           l1--;
+       }
+   }
 
-       ans += i - mn;
+   if(r==n-1){
+       if(u1>d1){
+           u1--;
+       }else{
+           d1--;
+       }
+   }
 
-       cout << "ans till " << i << " is : " << ans << endl;
-   } 
+   if(l==n-1){
+       if(u1>d1){
+           u1--;
+       }else{
+           d1--;
+       }
+   }
 
-   cout << ans << endl;
+   if(u1 < 0 || d1 < 0 || r1 < 0 || l1 < 0)cout << "NO" << endl;
+   else cout << "YES" << endl;
 
-   cout << "------------------------------------" << endl;
   }
 }
 

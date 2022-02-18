@@ -229,32 +229,17 @@ void solve() {
   cin >> t;
   while (t--)
   {
-//    ll n;
-//    cin >> n;
-   string s;
-   cin >> s;
+   ll n,a,y;
+   cin >> n >> a >> y;
 
-   int x[2] = {-1,-1};
-
-   ll ans = 0;
-
-   for(ll i=0;i<s.length();i++){
-       int c = s[i] - '0';
-
-       if(c == 1 || c==0){
-           x[c^(i%2)] = i;
-       }
-
-       ll mn = min(x[0],x[1]);
-
-       ans += i - mn;
-
-       cout << "ans till " << i << " is : " << ans << endl;
+   ll sum = a, curr=0;
+   for(ll i=0;i<n;i++){
+       cin >> curr;
+       sum += curr;
    } 
 
-   cout << ans << endl;
-
-   cout << "------------------------------------" << endl;
+   if(sum%2 == y%2)cout << "Alice" << endl;
+   else cout << "Bob" << endl;
   }
 }
 

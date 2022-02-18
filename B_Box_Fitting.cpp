@@ -229,32 +229,49 @@ void solve() {
   cin >> t;
   while (t--)
   {
-//    ll n;
-//    cin >> n;
-   string s;
-   cin >> s;
+   ll n,w;
+   cin >> n >> w;
 
-   int x[2] = {-1,-1};
+   ll ans = 1;
+   ll leftspace = w;
 
-   ll ans = 0;
+   ll cnt[20] = {0};
+   ll curr;
+   for(ll i=0;i<n;i++){
+       cin >> curr;
 
-   for(ll i=0;i<s.length();i++){
-       int c = s[i] - '0';
+       ll curval = log2(curr);
+       cnt[curval]++;
+   }
 
-       if(c == 1 || c==0){
-           x[c^(i%2)] = i;
+   for(ll i=0;i<n;i++){
+       ll largest = -1;
+
+       for(ll j=19;j>=0;j--){
+           if(cnt[j] and (leftspace >= (1<<j))){
+               largest = j;
+               break;
+           }
        }
 
-       ll mn = min(x[0],x[1]);
+       if(largest == -1){
+           ans++;
+           leftspace = w;
 
-       ans += i - mn;
+           for(ll j=19;j>=0;j--){
+               if(cnt[j] and (leftspace >= (1<<j))){
+                   largest = j;
+                   break;
+               }
+           }
+       }
 
-       cout << "ans till " << i << " is : " << ans << endl;
-   } 
+       cnt[largest] -= 1;
+       leftspace -= (1<<largest);
+   }
 
    cout << ans << endl;
 
-   cout << "------------------------------------" << endl;
   }
 }
 

@@ -221,41 +221,54 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
+map<char,vector<ll>> mm;
 
 void solve() {
 
-  for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
-  int t;
-  cin >> t;
-  while (t--)
-  {
-//    ll n;
-//    cin >> n;
-   string s;
-   cin >> s;
+  ll n,m;
+  cin >> n >> m;
+  string s,t;
+  cin >> s >> t;
 
-   int x[2] = {-1,-1};
-
-   ll ans = 0;
-
-   for(ll i=0;i<s.length();i++){
-       int c = s[i] - '0';
-
-       if(c == 1 || c==0){
-           x[c^(i%2)] = i;
-       }
-
-       ll mn = min(x[0],x[1]);
-
-       ans += i - mn;
-
-       cout << "ans till " << i << " is : " << ans << endl;
-   } 
-
-   cout << ans << endl;
-
-   cout << "------------------------------------" << endl;
+  for(ll i=0;i<s.size();i++){
+      mm[s[i]].push_back(i);
   }
+
+  ll minval[m], maxval[m];
+
+  ll curr = -1;
+
+  for(ll i=0;i<m;i++){
+      ll ind = upper_bound(mm[t[i]].begin(),mm[t[i]].end(),curr) - mm[t[i]].begin();
+      int indins = mm[t[i]][ind];
+      minval[i] = indins;
+      curr = indins;
+  }
+
+  for(auto &child:mm){
+      for(ll i=0;i<child.second.size();i++){
+          child.second[i] = -child.second[i];
+      }
+      sort(child.second.begin(),child.second.end());
+  }
+
+  curr = -n;
+
+  for(ll i=m-1;i>=0;i--){
+      ll ind = upper_bound(mm[t[i]].begin(),mm[t[i]].end(),curr) - mm[t[i]].begin();
+      ll indins = mm[t[i]][ind];
+      maxval[i] = -indins;
+      curr = indins;
+  }
+
+  ll ans = -1;
+
+  for(ll i=1;i<m;i++){
+      ans = max(ans,maxval[i]-minval[i-1]);
+  }
+
+  cout << ans << endl;
+
 }
 
 int32_t main() {

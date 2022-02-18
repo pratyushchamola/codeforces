@@ -221,40 +221,71 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
+vector<ll> boysarr[200010];
 
 void solve() {
 
-  for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
+//   for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
   int t;
   cin >> t;
   while (t--)
   {
-//    ll n;
-//    cin >> n;
-   string s;
-   cin >> s;
+   ll b,g,c;
+   cin >> b >> g >> c;
 
-   int x[2] = {-1,-1};
+   for(ll i=0;i<=max(b,g);i++)boysarr[i].clear();
+
+   vector<ll> boys(c), girls(c);
+   for(ll i=0;i<c;i++){
+       cin >> boys[i];
+   }
+
+    map<ll,ll> mp;
+   for(ll i=0;i<c;i++){
+       cin >> girls[i];
+
+       mp[girls[i]]++;
+   }
+
+   ll tot = c;
+   for(ll i=0;i<c;i++){
+       boysarr[boys[i]].push_back(girls[i]);
+   }
+
 
    ll ans = 0;
 
-   for(ll i=0;i<s.length();i++){
-       int c = s[i] - '0';
+//    for(int i=1;i<b;i++){
+//        for(ll child:boysarr[i]){
+//            for(int j=i+1;j<=b;j++){
+//                for(ll secchild:boysarr[j]){
+//                    if(secchild != child){
+//                        ans++;
+//                    }
+//                }
+//            }
+//        }
+//    }
+    
+    ll temptot = tot;
+    for(ll i=1;i<b;i++){
+        for(ll child:boysarr[i]){
+            mp[child]--;
+            temptot--;
+        }
 
-       if(c == 1 || c==0){
-           x[c^(i%2)] = i;
-       }
+        for(ll child:boysarr[i]){
+            // temptot
+            temptot -= mp[child];
 
-       ll mn = min(x[0],x[1]);
+            ans += temptot;
 
-       ans += i - mn;
-
-       cout << "ans till " << i << " is : " << ans << endl;
-   } 
+            temptot += mp[child];
+        }
+    }
 
    cout << ans << endl;
 
-   cout << "------------------------------------" << endl;
   }
 }
 

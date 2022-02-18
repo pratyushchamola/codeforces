@@ -229,32 +229,57 @@ void solve() {
   cin >> t;
   while (t--)
   {
-//    ll n;
-//    cin >> n;
-   string s;
-   cin >> s;
+   ll n, k;
+   cin >> n >> k;
 
-   int x[2] = {-1,-1};
-
+   ll cursum = 0;
    ll ans = 0;
+   ll curr = 0;
 
-   for(ll i=0;i<s.length();i++){
-       int c = s[i] - '0';
-
-       if(c == 1 || c==0){
-           x[c^(i%2)] = i;
+   vector<ll> values(n);
+   for(ll i=0;i<n;i++){
+       cin >> curr;
+       values[i] = curr;
+       if(i == 0){
+           cursum = curr;
+           continue;
        }
 
-       ll mn = min(x[0],x[1]);
+       if((curr*1ll*100) > (k*1ll*cursum)){
+           ans += (curr*100*1ll) - (k*1ll*cursum);
+           cursum += (curr*100*1ll) - (k*1ll*cursum);
+       }
 
-       ans += i - mn;
-
-       cout << "ans till " << i << " is : " << ans << endl;
+       cursum += curr;
    } 
 
-   cout << ans << endl;
+   ll low = 0;
+   ll high = ans;
 
-   cout << "------------------------------------" << endl;
+   while((high - low) > 1){
+       ll mid = (high+low)>>1;
+
+       ll prevsum = mid + values[0];
+
+       bool flag = true;
+
+       for(ll i=1;i<n;i++){
+           if(values[i]*1ll*100 > (k*1ll*prevsum)){
+               flag = false;
+               break;
+           }
+
+           prevsum += values[i];
+       }
+
+       if(flag){
+           high = mid;
+       }else{
+           low = mid;
+       }
+   }
+
+   cout << high << endl;
   }
 }
 

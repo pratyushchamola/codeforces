@@ -229,32 +229,18 @@ void solve() {
   cin >> t;
   while (t--)
   {
-//    ll n;
-//    cin >> n;
-   string s;
-   cin >> s;
+   ll n,k;
+   cin >> n >> k;
 
-   int x[2] = {-1,-1};
+   ll valback = n%k + 1;
+   ll valfront = k - valback;
 
-   ll ans = 0;
+//    vector<ll> ans;
 
-   for(ll i=0;i<s.length();i++){
-       int c = s[i] - '0';
+    for(ll i=1;i<=valfront;i++)cout << i << " ";
 
-       if(c == 1 || c==0){
-           x[c^(i%2)] = i;
-       }
-
-       ll mn = min(x[0],x[1]);
-
-       ans += i - mn;
-
-       cout << "ans till " << i << " is : " << ans << endl;
-   } 
-
-   cout << ans << endl;
-
-   cout << "------------------------------------" << endl;
+    for(ll i=k,j = valback;j>0 && i>0;j--,i--)cout << i << " ";
+    cout << endl;
   }
 }
 

@@ -224,37 +224,62 @@ long long power(int base, int n, int mod)
 
 void solve() {
 
-  for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
   int t;
   cin >> t;
   while (t--)
   {
-//    ll n;
-//    cin >> n;
-   string s;
-   cin >> s;
+    ll n;
+    cin >> n;
 
-   int x[2] = {-1,-1};
+    ll sum = 0;
+    ll ans = 0;
 
-   ll ans = 0;
+    vector<ll> a(n), b(n);
 
-   for(ll i=0;i<s.length();i++){
-       int c = s[i] - '0';
+    for(ll i=0;i<n;i++){
+        cin >> a[i];
 
-       if(c == 1 || c==0){
-           x[c^(i%2)] = i;
-       }
+        sum = sum + (a[i]*a[i]*(n - 2ll));
 
-       ll mn = min(x[0],x[1]);
+        ans += a[i];
+    }
 
-       ans += i - mn;
+    for(ll i=0;i<n;i++){
+        cin >> b[i];
 
-       cout << "ans till " << i << " is : " << ans << endl;
-   } 
+        sum = sum + (b[i]*b[i]*(n-2ll));
 
-   cout << ans << endl;
+        ans += b[i];
+    }
 
-   cout << "------------------------------------" << endl;
+    vector<vector<bool>> dp(n,vector<bool>(10001,false));
+
+    dp[0][a[0]] = dp[0][b[0]] = true;
+
+    for(ll i=1;i<n;i++){
+        for(ll j=0;j<=10000;j++){
+            if(a[i] <= j){
+                dp[i][j] = dp[i][j] || dp[i-1][j - a[i]];
+            }
+
+            if(b[i] <= j){
+                dp[i][j] = dp[i][j] || dp[i-1][j - b[i]];
+            }
+        }
+    }
+
+    ll toret = INT_MAX;
+
+    for(ll j=0;j<=10000;j++){
+        if(dp[n-1][j]==true){
+            ll val1 = j*j;
+            ll val2 = (ans-j)*(ans-j);
+            ll curans = val2 + val1;
+            toret = min(toret,curans);
+        }
+    }
+
+    cout << sum + toret << endl;
   }
 }
 

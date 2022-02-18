@@ -229,32 +229,22 @@ void solve() {
   cin >> t;
   while (t--)
   {
-//    ll n;
-//    cin >> n;
-   string s;
-   cin >> s;
+   ll n;
+   cin >> n;
 
-   int x[2] = {-1,-1};
+   vector<ll> oddarr,evenarr;
+   ll curr;
 
-   ll ans = 0;
+   for(ll i=0;i<n;i++){
+       cin >> curr;
 
-   for(ll i=0;i<s.length();i++){
-       int c = s[i] - '0';
+       if(curr%2 == 0)evenarr.push_back(curr);
+       else oddarr.push_back(curr);
+   }
 
-       if(c == 1 || c==0){
-           x[c^(i%2)] = i;
-       }
-
-       ll mn = min(x[0],x[1]);
-
-       ans += i - mn;
-
-       cout << "ans till " << i << " is : " << ans << endl;
-   } 
-
-   cout << ans << endl;
-
-   cout << "------------------------------------" << endl;
+   if(is_sorted(oddarr.begin(),oddarr.end()) && is_sorted(evenarr.begin(),evenarr.end())){
+       cout << "YES" << endl;
+   }else cout << "NO" << endl;
   }
 }
 

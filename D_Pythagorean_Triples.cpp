@@ -229,32 +229,14 @@ void solve() {
   cin >> t;
   while (t--)
   {
-//    ll n;
-//    cin >> n;
-   string s;
-   cin >> s;
-
-   int x[2] = {-1,-1};
+   ll n;
+   cin >> n;
 
    ll ans = 0;
 
-   for(ll i=0;i<s.length();i++){
-       int c = s[i] - '0';
+   for(ll i=3;i*i <= (2*n-1);i += 2)ans++;
 
-       if(c == 1 || c==0){
-           x[c^(i%2)] = i;
-       }
-
-       ll mn = min(x[0],x[1]);
-
-       ans += i - mn;
-
-       cout << "ans till " << i << " is : " << ans << endl;
-   } 
-
-   cout << ans << endl;
-
-   cout << "------------------------------------" << endl;
+   cout << ans << endl; 
   }
 }
 

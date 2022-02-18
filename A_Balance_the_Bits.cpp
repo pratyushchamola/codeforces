@@ -229,32 +229,61 @@ void solve() {
   cin >> t;
   while (t--)
   {
-//    ll n;
-//    cin >> n;
+   ll n;
+   cin >> n;
+
    string s;
    cin >> s;
 
-   int x[2] = {-1,-1};
+   if(s[0] == '0' || s[n-1] == '0')cout << "NO" << endl;
+   else{
+       ll cntzero = 0;
+       ll cntone = 0;
 
-   ll ans = 0;
-
-   for(ll i=0;i<s.length();i++){
-       int c = s[i] - '0';
-
-       if(c == 1 || c==0){
-           x[c^(i%2)] = i;
+       for(ll i=0;i<n;i++){
+           if(s[i] == '1')cntone++;
+           else cntzero++;
        }
 
-       ll mn = min(x[0],x[1]);
+       if(cntone%2 == 1){
+           cout << "NO" << endl;
+           continue;
+       }
 
-       ans += i - mn;
+       string a = "(";
+       string b = "(";
 
-       cout << "ans till " << i << " is : " << ans << endl;
+       cntzero = 0;
+       cntone = 0;
+       for(ll i=1;i<(n-1);i++){
+           if(s[i] == '0'){
+               cntzero++;
+
+               if(cntzero%2 == 1){
+                   a += "(";
+                   b += ")";
+               }else{
+                   a += ")";
+                   b += "(";
+               }
+           }else{
+               cntone++;
+
+               if(cntone%2 == 1){
+                   a += "(";
+                   b += "(";
+               }else{
+                   a += ")";
+                   b += ")";
+               }
+           }
+       }
+       
+       a += ")";
+       b += ")";
+
+       cout << "YES" << endl << a << endl << b << endl;
    } 
-
-   cout << ans << endl;
-
-   cout << "------------------------------------" << endl;
   }
 }
 
