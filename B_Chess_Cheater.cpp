@@ -224,77 +224,59 @@ long long power(int base, int n, int mod)
 
 void solve() {
 
-  for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
+  // for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
   int t;
   cin >> t;
   while (t--)
   {
-    ll rows,cols;
-    cin >> rows >> cols;
+   ll n,k;
+   cin >> n >> k;
+   string s;
+   cin >> s;
 
-    ll maxl = 0, maxr = 0, maxu = 0, maxd = 0;
-    ll curl = 0, curr = 0, curu = 0, curd = 0;
+   vector<ll> llen;
+//    ll prev = -1;
 
-    string s;
-    cin >> s;
 
-    ll n = s.length();
-    for(ll i=0;i<n;i++){
-        if(s[i] == 'L'){
-            if(curr > 0)curr--;
-            else{
-                if((max(maxl,curl+1) + maxr) > (cols-1))break;
-                else {
-                    curl += 1;
-                    maxl = max(maxl,curl);
-                }
-            }
-        }
+// 2*win - winningstreaks
+    ll totwins = 0, totloss = 0, winningstreak = 0;
+   for(ll i=0;i<n;i++){
+       if(s[i] == 'W'){
+           totwins++;
+           if(i == 0 || s[i-1] == 'L')winningstreak++;
+       }else{
+           totloss++;
+           if(i == 0 || s[i-1] == 'W')llen.push_back(0);
+           llen.back()++;
+       }
+   }
 
-        if(s[i] == 'R'){
-            if(curl > 0)curl--;
-            else{
-                if((max(maxr,curr+1) + maxl) > (cols-1))break;
-                else {
-                    curr += 1;
-                    maxr = max(maxr,curr);
-                }
-            }
-        }
+   if(s[0] == 'L')llen[0] = 1e8;
+   if(s[n-1] == 'L')llen.back() = 1e8;
 
-        if(s[i] == 'U'){
-            if(curd > 0)curd--;
-            else{
-                if((max(maxu,curu+1) + maxd) > (rows-1))break;
-                else {
-                    curu += 1;
-                    maxu = max(maxu,curu);
-                }
-            }
-        }
+   sort(all(llen));
 
-        if(s[i] == 'D'){
-            if(curu > 0)curu--;
-            else{
-                if((max(maxd,curd+1) + maxu) > (rows-1))break;
-                else {
-                    curd += 1;
-                    maxd = max(maxd,curd);
-                }
-            }
-        }
-    }
+   if(k>=totloss){
+       cout << 2*n - 1 << endl;
+       continue;
+   }
 
-    // cout << maxl << " " << maxr << " " << maxu << " " << maxd << endl;
+   if(totwins == 0){
+       if(k == 0)cout << 0 << endl;
+       else cout << 2*k -1 << endl;
+       continue;
+   }
 
-    ll ansx = cols, ansy = rows;
-    if(maxr >= maxl)ansx -= maxr;
-    else ansx = maxl+1;
+   totwins += k;
+   for(ll i=0;i<llen.size();i++){
+       if(llen[i] > k)break;
 
-    if(maxd >= maxu)ansy -= maxd;
-    else ansy = maxu+1;
+       winningstreak--;
+       k -= llen[i];
+   }
 
-    cout << ansy << " " << ansx << endl; 
+   cout << 2*totwins - winningstreak << endl;
+    
   }
 }
 

@@ -229,72 +229,47 @@ void solve() {
   cin >> t;
   while (t--)
   {
-    ll rows,cols;
-    cin >> rows >> cols;
+    ll n;
+    cin >> n;
 
-    ll maxl = 0, maxr = 0, maxu = 0, maxd = 0;
-    ll curl = 0, curr = 0, curu = 0, curd = 0;
+    vector<ll> values(n), cnt(n+1,0);
 
-    string s;
-    cin >> s;
-
-    ll n = s.length();
     for(ll i=0;i<n;i++){
-        if(s[i] == 'L'){
-            if(curr > 0)curr--;
-            else{
-                if((max(maxl,curl+1) + maxr) > (cols-1))break;
-                else {
-                    curl += 1;
-                    maxl = max(maxl,curl);
-                }
-            }
-        }
-
-        if(s[i] == 'R'){
-            if(curl > 0)curl--;
-            else{
-                if((max(maxr,curr+1) + maxl) > (cols-1))break;
-                else {
-                    curr += 1;
-                    maxr = max(maxr,curr);
-                }
-            }
-        }
-
-        if(s[i] == 'U'){
-            if(curd > 0)curd--;
-            else{
-                if((max(maxu,curu+1) + maxd) > (rows-1))break;
-                else {
-                    curu += 1;
-                    maxu = max(maxu,curu);
-                }
-            }
-        }
-
-        if(s[i] == 'D'){
-            if(curu > 0)curu--;
-            else{
-                if((max(maxd,curd+1) + maxu) > (rows-1))break;
-                else {
-                    curd += 1;
-                    maxd = max(maxd,curd);
-                }
-            }
-        }
+        cin >> values[i];
+        cnt[values[i]]++;
     }
 
-    // cout << maxl << " " << maxr << " " << maxu << " " << maxd << endl;
+    ll ans = 0;
 
-    ll ansx = cols, ansy = rows;
-    if(maxr >= maxl)ansx -= maxr;
-    else ansx = maxl+1;
+    // possible answer :
+    // x x+1 x+2
+    // x x x
+    // x x x+1
+    // x x+1 x+1
+    // x x x+2
+    // x x+2 x+2
 
-    if(maxd >= maxu)ansy -= maxd;
-    else ansy = maxu+1;
+    for (int i = 2; i < n; i++) {
+        ans += cnt[i - 1] * cnt[i] * cnt[i + 1];
+    }
+    for (int i = 1; i < n; i++) {
+        ans += cnt[i] * (cnt[i] - 1) / 2 * cnt[i + 1];
+    }
+    for (int i = 2; i <= n; i++) {
+        ans += cnt[i - 1] * cnt[i] * (cnt[i] - 1) / 2;
+    }
+    for (int i = 2; i < n; i++) {
+        ans += cnt[i - 1] * cnt[i + 1] * (cnt[i + 1] - 1) / 2;
+    }
+    for (int i = 2; i < n; i++) {
+        ans += cnt[i + 1] * cnt[i - 1] * (cnt[i - 1] - 1) / 2;
+    }
+    for (int i = 1; i <= n; i++) {
+        ans += cnt[i] * (cnt[i] - 1) * (cnt[i] - 2) / 6;
+    }
 
-    cout << ansy << " " << ansx << endl; 
+    cout << ans << endl;
+
   }
 }
 

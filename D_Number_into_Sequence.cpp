@@ -224,77 +224,44 @@ long long power(int base, int n, int mod)
 
 void solve() {
 
-  for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
+  // for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
   int t;
   cin >> t;
   while (t--)
   {
-    ll rows,cols;
-    cin >> rows >> cols;
+   ll n;
+   cin >> n;
 
-    ll maxl = 0, maxr = 0, maxu = 0, maxd = 0;
-    ll curl = 0, curr = 0, curu = 0, curd = 0;
+   vector<pair<ll,ll>> cntval;
+//    ll tempn = n;
+   for(ll i=2;(i*i) <= n;i++){
+       if(n%i == 0){
+           ll cnt = 0;
+           while(n%i == 0){
+               cnt++;
+               n /= i;
+           }
 
-    string s;
-    cin >> s;
+           if(cnt > 0)cntval.push_back({cnt,i});
+       }
+   }
 
-    ll n = s.length();
-    for(ll i=0;i<n;i++){
-        if(s[i] == 'L'){
-            if(curr > 0)curr--;
-            else{
-                if((max(maxl,curl+1) + maxr) > (cols-1))break;
-                else {
-                    curl += 1;
-                    maxl = max(maxl,curl);
-                }
-            }
-        }
+   if(n > 1)cntval.push_back({1,n});
 
-        if(s[i] == 'R'){
-            if(curl > 0)curl--;
-            else{
-                if((max(maxr,curr+1) + maxl) > (cols-1))break;
-                else {
-                    curr += 1;
-                    maxr = max(maxr,curr);
-                }
-            }
-        }
+   sort(cntval.rbegin(),cntval.rend());
 
-        if(s[i] == 'U'){
-            if(curd > 0)curd--;
-            else{
-                if((max(maxu,curu+1) + maxd) > (rows-1))break;
-                else {
-                    curu += 1;
-                    maxu = max(maxu,curu);
-                }
-            }
-        }
+   vector<ll> ans(cntval[0].first,cntval[0].second);
 
-        if(s[i] == 'D'){
-            if(curu > 0)curu--;
-            else{
-                if((max(maxd,curd+1) + maxu) > (rows-1))break;
-                else {
-                    curd += 1;
-                    maxd = max(maxd,curd);
-                }
-            }
-        }
-    }
+   for(ll i=1;i<cntval.size();i++){
+       for(ll j=0;j<cntval[i].first;j++){
+           ans.back() *= cntval[i].second;
+       }
+   }
 
-    // cout << maxl << " " << maxr << " " << maxu << " " << maxd << endl;
+   cout << ans.size() << endl;
 
-    ll ansx = cols, ansy = rows;
-    if(maxr >= maxl)ansx -= maxr;
-    else ansx = maxl+1;
-
-    if(maxd >= maxu)ansy -= maxd;
-    else ansy = maxu+1;
-
-    cout << ansy << " " << ansx << endl; 
+   for(auto child:ans)cout << child << " ";
+   cout << endl; 
   }
 }
 

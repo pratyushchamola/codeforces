@@ -221,81 +221,53 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
+// BIT or fenwick tree
+const ll static maxn = 1e6 + 5;
+// const ll static maxa = 1e9 + 1;
+
+vector<ll> bts(maxn,0), btz(maxn,0), arr(maxn), temp(maxn), arrf(maxn);
+
+int nn;
+
+ll query(int ind,vector<ll>& btt){
+    ll sum = 0;
+    for(;ind>0;ind -= ind&(-ind))sum += btt[ind];
+
+    return sum;
+}
+
+void update(int x,int delta,vector<ll>& btt){
+    for(;x<=nn;x += x&(-x))btt[x] += delta;
+}
 
 void solve() {
+    cin >> nn;
 
-  for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
-  int t;
-  cin >> t;
-  while (t--)
-  {
-    ll rows,cols;
-    cin >> rows >> cols;
+    unordered_map<ll,ll> mmp;
 
-    ll maxl = 0, maxr = 0, maxu = 0, maxd = 0;
-    ll curl = 0, curr = 0, curu = 0, curd = 0;
+    for(ll i=1;i<=nn;i++){
+        cin >> arr[i];
 
-    string s;
-    cin >> s;
-
-    ll n = s.length();
-    for(ll i=0;i<n;i++){
-        if(s[i] == 'L'){
-            if(curr > 0)curr--;
-            else{
-                if((max(maxl,curl+1) + maxr) > (cols-1))break;
-                else {
-                    curl += 1;
-                    maxl = max(maxl,curl);
-                }
-            }
-        }
-
-        if(s[i] == 'R'){
-            if(curl > 0)curl--;
-            else{
-                if((max(maxr,curr+1) + maxl) > (cols-1))break;
-                else {
-                    curr += 1;
-                    maxr = max(maxr,curr);
-                }
-            }
-        }
-
-        if(s[i] == 'U'){
-            if(curd > 0)curd--;
-            else{
-                if((max(maxu,curu+1) + maxd) > (rows-1))break;
-                else {
-                    curu += 1;
-                    maxu = max(maxu,curu);
-                }
-            }
-        }
-
-        if(s[i] == 'D'){
-            if(curu > 0)curu--;
-            else{
-                if((max(maxd,curd+1) + maxu) > (rows-1))break;
-                else {
-                    curd += 1;
-                    maxd = max(maxd,curd);
-                }
-            }
-        }
+        temp[i] = arr[i];
     }
 
-    // cout << maxl << " " << maxr << " " << maxu << " " << maxd << endl;
+    sort(temp.begin()+1,temp.begin()+nn+1);
 
-    ll ansx = cols, ansy = rows;
-    if(maxr >= maxl)ansx -= maxr;
-    else ansx = maxl+1;
+    for(ll i=1;i<=nn;i++)mmp[temp[i]] = i;
+    for(ll i=1;i<=nn;i++)arrf[i] = mmp[arr[i]];
 
-    if(maxd >= maxu)ansy -= maxd;
-    else ansy = maxu+1;
+    ll ans = 0;
 
-    cout << ansy << " " << ansx << endl; 
-  }
+    for(ll i=nn;i>0;i--){
+        ans += (arrf[i]==1?0:query(arrf[i]-1,btz));
+        ll val = (arrf[i]==1?0:query(arrf[i]-1,bts));
+
+        update(arrf[i],val,btz);
+        update(arrf[i],1,bts);
+    }
+
+    cout << ans << endl;
+  
 }
 
 int32_t main() {

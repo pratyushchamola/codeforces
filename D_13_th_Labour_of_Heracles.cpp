@@ -221,80 +221,88 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
+const ll maxn = 100010;
+
+vector<ll> arr[maxn];
+ll cnt[maxn] = {0};
 
 void solve() {
 
-  for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
+//   for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
   int t;
   cin >> t;
   while (t--)
   {
-    ll rows,cols;
-    cin >> rows >> cols;
+    ll n;
+    cin >> n;
 
-    ll maxl = 0, maxr = 0, maxu = 0, maxd = 0;
-    ll curl = 0, curr = 0, curu = 0, curd = 0;
+    ll sum = 0;
+    for(ll i=1;i<=n;i++){
+        arr[i].clear();
+        cnt[i] = 0;
+    }
 
-    string s;
-    cin >> s;
+    vector<ll> values(n);
+    for(ll i=0;i<n;i++)cin >> values[i];
+    ll u,v;
+    for(ll i=1;i<n;i++){
+        cin >> u >> v;
+        arr[u].push_back(v);
+        arr[v].push_back(u);
 
-    ll n = s.length();
-    for(ll i=0;i<n;i++){
-        if(s[i] == 'L'){
-            if(curr > 0)curr--;
-            else{
-                if((max(maxl,curl+1) + maxr) > (cols-1))break;
-                else {
-                    curl += 1;
-                    maxl = max(maxl,curl);
-                }
-            }
-        }
+        sum += values[u-1] + values[v-1];
+    }
 
-        if(s[i] == 'R'){
-            if(curl > 0)curl--;
-            else{
-                if((max(maxr,curr+1) + maxl) > (cols-1))break;
-                else {
-                    curr += 1;
-                    maxr = max(maxr,curr);
-                }
-            }
-        }
+    vector<pair<ll,ll>> nodeval;
 
-        if(s[i] == 'U'){
-            if(curd > 0)curd--;
-            else{
-                if((max(maxu,curu+1) + maxd) > (rows-1))break;
-                else {
-                    curu += 1;
-                    maxu = max(maxu,curu);
-                }
-            }
-        }
-
-        if(s[i] == 'D'){
-            if(curu > 0)curu--;
-            else{
-                if((max(maxd,curd+1) + maxu) > (rows-1))break;
-                else {
-                    curd += 1;
-                    maxd = max(maxd,curd);
-                }
-            }
+    for(ll i=1;i<=n;i++){
+        if(arr[i].size() > 1){
+            nodeval.push_back({values[i-1],i});
+            cnt[i] = arr[i].size() - 1;
         }
     }
 
-    // cout << maxl << " " << maxr << " " << maxu << " " << maxd << endl;
 
-    ll ansx = cols, ansy = rows;
-    if(maxr >= maxl)ansx -= maxr;
-    else ansx = maxl+1;
+    vector<ll> answer(n-1);
 
-    if(maxd >= maxu)ansy -= maxd;
-    else ansy = maxu+1;
+    answer[n-2] = sum;
+    ll k = n-3;
+    sort(nodeval.begin(),nodeval.end());
 
-    cout << ansy << " " << ansx << endl; 
+    for(ll i=0;(i<nodeval.size()) && (k>=0);i++){
+        bool flag = false;
+
+        for(ll j=0;j<cnt[nodeval[i].second];j++){
+            sum -= nodeval[i].first;
+
+            answer[k] = sum;
+            k--;
+
+            if(k<0){
+                flag = true;
+                break;
+            }
+        }
+        // for(ll child:arr[nodeval[i].second]){
+        //     sum -= nodeval[i].first;
+
+        //     answer[k] = sum;
+        //     k--;
+
+        //     if(k<0){
+        //         flag = true;
+        //         break;
+        //     }
+
+        //     // cnt[child] -= 1; 
+        // }
+
+        if(flag)break;
+    }
+
+    for(ll child:answer)cout << child << " ";
+    // for(auto child:nodeval)cout << child.second << " ";
+    cout << endl;
   }
 }
 

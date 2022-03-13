@@ -229,72 +229,43 @@ void solve() {
   cin >> t;
   while (t--)
   {
-    ll rows,cols;
-    cin >> rows >> cols;
+   string s;
+   cin >> s;
 
-    ll maxl = 0, maxr = 0, maxu = 0, maxd = 0;
-    ll curl = 0, curr = 0, curu = 0, curd = 0;
+   vector<pair<ll,ll>> values;
+   ll n = s.length();
+   pair<ll,ll> curr = mp(0,0);
+   for(ll i=0;i<n;i++){
+       if(s[i] == 'U')curr.ff++;
+       if(s[i] == 'D')curr.ff--;
+       if(s[i] == 'R')curr.ss++;
+       if(s[i] == 'L')curr.ss--;
 
-    string s;
-    cin >> s;
+       if(curr != mp(0*1ll,0*1ll))values.push_back(curr);
+   }
 
-    ll n = s.length();
-    for(ll i=0;i<n;i++){
-        if(s[i] == 'L'){
-            if(curr > 0)curr--;
-            else{
-                if((max(maxl,curl+1) + maxr) > (cols-1))break;
-                else {
-                    curl += 1;
-                    maxl = max(maxl,curl);
-                }
-            }
-        }
+   pair<ll,ll> ans = {0,0};
 
-        if(s[i] == 'R'){
-            if(curl > 0)curl--;
-            else{
-                if((max(maxr,curr+1) + maxl) > (cols-1))break;
-                else {
-                    curr += 1;
-                    maxr = max(maxr,curr);
-                }
-            }
-        }
+   for(auto child:values){
+       pair<ll,ll> cur_pair = {0,0}, next_pair = {0,0};
 
-        if(s[i] == 'U'){
-            if(curd > 0)curd--;
-            else{
-                if((max(maxu,curu+1) + maxd) > (rows-1))break;
-                else {
-                    curu += 1;
-                    maxu = max(maxu,curu);
-                }
-            }
-        }
+       for(ll i=0;i<n;i++){
+           if(s[i] == 'U')cur_pair.ff++;
+           if(s[i] == 'D')cur_pair.ff--;
+           if(s[i] == 'R')cur_pair.ss++;
+           if(s[i] == 'L')cur_pair.ss--;
 
-        if(s[i] == 'D'){
-            if(curu > 0)curu--;
-            else{
-                if((max(maxd,curd+1) + maxu) > (rows-1))break;
-                else {
-                    curd += 1;
-                    maxd = max(maxd,curd);
-                }
-            }
-        }
-    }
+           if(cur_pair != child)next_pair = cur_pair;
+           else cur_pair = next_pair;
+       }
 
-    // cout << maxl << " " << maxr << " " << maxu << " " << maxd << endl;
+       if(next_pair == mp(0*1ll,0*1ll)){
+           ans = child;
+           break;
+       }
+   }
 
-    ll ansx = cols, ansy = rows;
-    if(maxr >= maxl)ansx -= maxr;
-    else ansx = maxl+1;
-
-    if(maxd >= maxu)ansy -= maxd;
-    else ansy = maxu+1;
-
-    cout << ansy << " " << ansx << endl; 
+   cout << ans.ss << " " << ans.ff << endl; 
   }
 }
 

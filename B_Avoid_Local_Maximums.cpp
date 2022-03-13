@@ -21,7 +21,6 @@ using namespace chrono;
 #define sz(x) ((int)(x).size())
 #define all(x) (x).begin(), (x).end()
 #define fo(i,a,b) for(int i=a;i<b;i++)
-#define dtb(n,x) bitset<n>(x).to_string()
 
 
 #ifndef ONLINE_JUDGE
@@ -86,30 +85,30 @@ vector<int> pr; // store all primes till N
 //vector<int> fcnt; // factor count of each number
 vector<bool> prime; // true for prime numbers
 vector<int> spf; // smallest prime factor
- 
+
 void sieve() {
-    prime.assign(N, true);
-    spf.resize(N);
+	prime.assign(N, true);
+	spf.resize(N);
 //    fcnt.resize(N);
- 
-    prime[1] = false;
-    for (int p = 2; p < N; p++) {
-        if (prime[p]) {
-            spf[p] = p;
-            for (int i = p + p; i <= N; i += p) {
-                prime[i] = false; // not prime
-                if (spf[i] == 0) {
-                    spf[i] = p; // first divisor of i
-                }
-            }
-        }
-    }
- 
-    // for (int p = 2; p <= N; p++) { // storing primes
-    //     if (prime[p]) {
-    //         pr.pb(p);
-    //     }
-    // }
+
+	prime[1] = false;
+	for (int p = 2; p < N; p++) {
+		if (prime[p]) {
+			spf[p] = p;
+			for (int i = p + p; i <= N; i += p) {
+				prime[i] = false; // not prime
+				if (spf[i] == 0) {
+					spf[i] = p; // first divisor of i
+				}
+			}
+		}
+	}
+
+	// for (int p = 2; p <= N; p++) { // storing primes
+	//     if (prime[p]) {
+	//         pr.pb(p);
+	//     }
+	// }
 //
 //    for (int i = 2; i < N; ++i) { // counting factors of i
 //        fcnt[i] = fcnt[i / spf[i]] + 1;
@@ -120,192 +119,161 @@ void sieve() {
 //    }
 }
 
-long long inverse(long long i){
-    if(i==1) return 1;
-    return (MOD - ((MOD/i)*inverse(MOD%i))%MOD+MOD)%MOD;
+long long inverse(long long i) {
+	if (i == 1) return 1;
+	return (MOD - ((MOD / i) * inverse(MOD % i)) % MOD + MOD) % MOD;
 }
 
-vl fact(2e5 + 5,1);
+vl fact(2e5 + 5, 1);
 
 long long lcmcal(int a, int b, int curggcd) {
-    int temp = (a * b) % MOD;
-    // ll temp2 = gcd(a,b);
+	int temp = (a * b) % MOD;
+	// ll temp2 = gcd(a,b);
 
-    // return (int)(temp / curggcd);
-    return temp / curggcd;
+	// return (int)(temp / curggcd);
+	return temp / curggcd;
 }
 
 struct DSU
 {
-    ll n;
-    vector<int> p;
-    vector<int> sz;
-    DSU(int N)
-    {
-        n = N;
-        p.assign(n + 1,-1);
-        sz.assign(n+1,1);
-        for (int i = 0;i<=n;i++)p[i] = i;
-    }
-    ll Find(int i)
-    {
-        if (p[i] == i)return i;
-        return p[i] = Find(p[i]);
-    }
-    void Merge(int a,int b)
-    {
-        a = Find(a),b = Find(b);
-        if (a != b)p[b] = a;
-    }
-int getSize(int x)
-    {
-        return sz[x] = sz[Find(x)];
-    }
+	ll n;
+	vector<int> p;
+	DSU(int N)
+	{
+		n = N;
+		p.assign(n + 1, -1);
+		for (int i = 0; i <= n; i++)p[i] = i;
+	}
+	ll Find(int i)
+	{
+		if (p[i] == i)return i;
+		return p[i] = Find(p[i]);
+	}
+	void Merge(int a, int b)
+	{
+		a = Find(a), b = Find(b);
+		if (a != b)p[b] = a;
+	}
 };
 
-int binPow(int a,int b)
+int binPow(int a, int b)
 {
-    if (b == 0)return 1;
-    if (b == 1)return a;
-    ll ret = binPow(a,b/2);
-    if (b%2 == 0)return (ret * ret)%MOD;
-    return ((ret * ret)%MOD * a)%MOD;
+	if (b == 0)return 1;
+	if (b == 1)return a;
+	ll ret = binPow(a, b / 2);
+	if (b % 2 == 0)return (ret * ret) % MOD;
+	return ((ret * ret) % MOD * a) % MOD;
 }
 
 int inv(int a)
 {
-    return (binPow(a,MOD - 2)%MOD + MOD)%MOD;
+	return (binPow(a, MOD - 2) % MOD + MOD) % MOD;
 }
 
-int binom(int a,int b)
+int binom(int a, int b)
 {
-    if (b < 0 or a < 0)return 0;
-    return (((fact[a] * inv(fact[b]))%MOD * inv(fact[a - b]))%MOD + MOD)%MOD;
+	if (b < 0 or a < 0)return 0;
+	return (((fact[a] * inv(fact[b])) % MOD * inv(fact[a - b])) % MOD + MOD) % MOD;
 }
 
 ll moduloMultiplication(int a, int b)
 {
-    int res = 0; 
-    a %= MOD;
+	int res = 0;
+	a %= MOD;
 
-    while (b)
-    {
-        if (b & 1)
-            res = (res + a) % MOD;
+	while (b)
+	{
+		if (b & 1)
+			res = (res + a) % MOD;
 
-        a = (2 * a) % MOD;
+		a = (2 * a) % MOD;
 
-        b >>= 1; // b = b / 2
-    }
+		b >>= 1; // b = b / 2
+	}
 
-    return res;
+	return res;
 }
 
 
 long long power(int base, int n, int mod)
 {
-    long long ans = 1;
-    while (n != 0)
-    {
-        if (n & 1)
-        {
-            ans = (ans * base) % mod;
-            n = n - 1;
-        }
-        else
-        {
-            base = (base * base) % mod;
-            n = n / 2;
-        }
-    }
-    return ans;
+	long long ans = 1;
+	while (n != 0)
+	{
+		if (n & 1)
+		{
+			ans = (ans * base) % mod;
+			n = n - 1;
+		}
+		else
+		{
+			base = (base * base) % mod;
+			n = n / 2;
+		}
+	}
+	return ans;
 }
 
 
 void solve() {
 
-  for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
-  int t;
-  cin >> t;
-  while (t--)
-  {
-    ll rows,cols;
-    cin >> rows >> cols;
+	for (int i = 1; i <= 2e5; i++)fact[i] = (i * fact[i - 1]) % MOD;
+	int t;
+	cin >> t;
+	while (t--)
+	{
+		ll n;
+		cin >> n;
 
-    ll maxl = 0, maxr = 0, maxu = 0, maxd = 0;
-    ll curl = 0, curr = 0, curu = 0, curd = 0;
+		vector<ll> values(n);
 
-    string s;
-    cin >> s;
+		for (ll i = 0; i < n; i++)cin >> values[i];
 
-    ll n = s.length();
-    for(ll i=0;i<n;i++){
-        if(s[i] == 'L'){
-            if(curr > 0)curr--;
-            else{
-                if((max(maxl,curl+1) + maxr) > (cols-1))break;
-                else {
-                    curl += 1;
-                    maxl = max(maxl,curl);
-                }
-            }
-        }
+		ll ans = 0;
+		bool flag = false;
 
-        if(s[i] == 'R'){
-            if(curl > 0)curl--;
-            else{
-                if((max(maxr,curr+1) + maxl) > (cols-1))break;
-                else {
-                    curr += 1;
-                    maxr = max(maxr,curr);
-                }
-            }
-        }
+		vector<bool> check(n, false);
 
-        if(s[i] == 'U'){
-            if(curd > 0)curd--;
-            else{
-                if((max(maxu,curu+1) + maxd) > (rows-1))break;
-                else {
-                    curu += 1;
-                    maxu = max(maxu,curu);
-                }
-            }
-        }
+		for (ll i = 1; i < (n - 1); i++) {
+			if ((values[i] > values[i - 1]) && (values[i] > values[i + 1]))check[i] = true;
+		}
 
-        if(s[i] == 'D'){
-            if(curu > 0)curu--;
-            else{
-                if((max(maxd,curd+1) + maxu) > (rows-1))break;
-                else {
-                    curd += 1;
-                    maxd = max(maxd,curd);
-                }
-            }
-        }
-    }
+		// ll ans = 0;
+		for (ll i = 1; i < (n - 2); i++) {
+			if ((check[i] == true) and (check[i + 2] == true)) {
+				check[i] = check[i + 2] = false;
+				ans++;
+				values[i + 1] = max(values[i], values[i + 2]);
+			}
+		}
 
-    // cout << maxl << " " << maxr << " " << maxu << " " << maxd << endl;
+		for (ll i = 1; i < (n - 1); i++) {
+			if (check[i] == true) {
+				ans++;
+				values[i] = max(values[i - 1], values[i + 1]);
+			}
+		}
 
-    ll ansx = cols, ansy = rows;
-    if(maxr >= maxl)ansx -= maxr;
-    else ansx = maxl+1;
+		cout << ans << endl;
 
-    if(maxd >= maxu)ansy -= maxd;
-    else ansy = maxu+1;
-
-    cout << ansy << " " << ansx << endl; 
-  }
+		for (ll child : values)cout << child << " ";
+		cout << endl;
+	}
 }
 
 int32_t main() {
-  fastio();
-  auto start1 = high_resolution_clock::now();
-  solve();
-  auto stop1 = high_resolution_clock::now();
-  auto duration = duration_cast<microseconds>(stop1 - start1);
 #ifndef ONLINE_JUDGE
-  cerr << "Time: " << duration . count() / 1000 << endl;
+	freopen("input.txt", "r" , stdin);
+	freopen("output.txt", "w" , stdout);
+	freopen("Error.txt", "w", stderr);
+#endif
+	fastio();
+	auto start1 = high_resolution_clock::now();
+	solve();
+	auto stop1 = high_resolution_clock::now();
+	auto duration = duration_cast<microseconds>(stop1 - start1);
+#ifndef ONLINE_JUDGE
+	cerr << "Time: " << duration . count() / 1000 << endl;
 #endif
 }
 
@@ -313,17 +281,18 @@ int32_t main() {
 On getting WA:
 * Check if implementation is correct and NOTHING overflows.
 * Start thinking about counter cases for your logic as well as implementation.
-* Try removing redundancy (any additon you might have done for ease of 
+* Try removing redundancy (any additon you might have done for ease of
 implementation or thought process) and putting asserts.
 * Make a generator, an unoptimized but correct soln and run it against wrong soln.
-* When there a few values and we have to perform certain operations (mostly in game 
+* When there a few values and we have to perform certain operations (mostly in game
 theory), start looking for patterns in the answer in small values
 
 If nothing comes to mind:
 * Binary search over the ans
 * Think about more strong greedy
-* Think about bipartition, levels, adding/removing edges/nodes, degree 
+* Think about bipartition, levels, adding/removing edges/nodes, degree
 in trees and graphs
-* Try reducing the constraints or chaning the frame of reference and 
-then solving (mostly useful in DP/combinatorics) 
+* Try reducing the constraints or chaning the frame of reference and
+then solving (mostly useful in DP/combinatorics)
 */
+ 

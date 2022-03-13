@@ -7,7 +7,7 @@ using namespace chrono;
 // using namespace __gnu_pbds;
 
 #define fastio() ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL)
-// #define MOD 1000000007
+#define MOD 1000000007
 #define MOD1 998244353
 #define INF 1e18
 #define endl "\n"
@@ -31,7 +31,7 @@ using namespace chrono;
 const int N = 1005;
 const int K = 1005;
 
-const int MOD = 1e9 + 7;
+// const int MOD = 1e9 + 7;
 
 ll dp[N][K][2];
 ll n,k;
@@ -76,7 +76,7 @@ ll findans(ll curplane, ll curk,ll curdir){
     return ans;
 }
 
-// don't know y, cna't get output
+// don't know y, can't get output
 void solve() {
 
   int t;
@@ -88,6 +88,7 @@ void solve() {
       memset(dp,-1,sizeof(dp)); 
 
       cout << findans(1,k,1) << endl;
+      // cout << "hehe" << endl;
     // cout << 1 << endl;
   }
 }

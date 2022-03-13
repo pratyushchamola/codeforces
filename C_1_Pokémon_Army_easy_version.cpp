@@ -222,79 +222,63 @@ long long power(int base, int n, int mod)
 }
 
 
+ll maxans;
+
 void solve() {
 
-  for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
+  // for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
   int t;
   cin >> t;
   while (t--)
   {
-    ll rows,cols;
-    cin >> rows >> cols;
+   ll n,q;
+   cin >> n >> q;
+   maxans = 0;
+   vector<ll> values(n);
 
-    ll maxl = 0, maxr = 0, maxu = 0, maxd = 0;
-    ll curl = 0, curr = 0, curu = 0, curd = 0;
+   for(ll i=0;i<n;i++)cin >> values[i];
 
-    string s;
-    cin >> s;
+   // find first hill
+   ll tot = 0;
+   ll ind = -1;
+   for(ll i=1;i<n;i++){
+       if(values[i] < values[i-1]){
+           tot = values[i-1];
+           ind = i-1;
+           break;
+       }
+   }
 
-    ll n = s.length();
-    for(ll i=0;i<n;i++){
-        if(s[i] == 'L'){
-            if(curr > 0)curr--;
-            else{
-                if((max(maxl,curl+1) + maxr) > (cols-1))break;
-                else {
-                    curl += 1;
-                    maxl = max(maxl,curl);
+   if(ind == -1)cout << values[n-1] << endl;
+   else{
+       ll curr = values[ind];
+       bool flag = true;
+       for(ll i=ind;i<n;i++){
+           if(flag){
+               if(values[i-1]>values[i]){
+               curr = values[i];
+                }else{
+                    tot -= curr;
+                    flag = false;
+                    i -= 1;
                 }
-            }
-        }
+           }else{
+               if(values[i-1]<values[i]){
+                   curr = values[i];
+               }else{
+                   tot += curr;
+                   flag = true;
+                   i -= 1;
+               }
+           }
+       }
 
-        if(s[i] == 'R'){
-            if(curl > 0)curl--;
-            else{
-                if((max(maxr,curr+1) + maxl) > (cols-1))break;
-                else {
-                    curr += 1;
-                    maxr = max(maxr,curr);
-                }
-            }
-        }
+       if(flag == false){
+           tot += values[n-1];
+       }
 
-        if(s[i] == 'U'){
-            if(curd > 0)curd--;
-            else{
-                if((max(maxu,curu+1) + maxd) > (rows-1))break;
-                else {
-                    curu += 1;
-                    maxu = max(maxu,curu);
-                }
-            }
-        }
-
-        if(s[i] == 'D'){
-            if(curu > 0)curu--;
-            else{
-                if((max(maxd,curd+1) + maxu) > (rows-1))break;
-                else {
-                    curd += 1;
-                    maxd = max(maxd,curd);
-                }
-            }
-        }
-    }
-
-    // cout << maxl << " " << maxr << " " << maxu << " " << maxd << endl;
-
-    ll ansx = cols, ansy = rows;
-    if(maxr >= maxl)ansx -= maxr;
-    else ansx = maxl+1;
-
-    if(maxd >= maxu)ansy -= maxd;
-    else ansy = maxu+1;
-
-    cout << ansy << " " << ansx << endl; 
+       cout << tot << endl;
+   }
   }
 }
 
