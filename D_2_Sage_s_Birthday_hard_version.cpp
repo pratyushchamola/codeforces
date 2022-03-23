@@ -10,7 +10,7 @@ using namespace chrono;
 #define MOD 1000000007
 #define MOD1 998244353
 #define INF 1e18
-// #define endl "\n"
+#define endl "\n"
 #define pb push_back
 #define ppb pop_back
 #define mp make_pair
@@ -221,30 +221,67 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-int helper(int l,int r){
-    cout << "? " << l << " " << r << endl;
-    int val;
-    cin >> val;
-
-    return val;
-}
 
 void solve() {
+    ll n;
+    cin >> n;
+    vector<ll> values(n);
 
-  ll n;
-  cin >> n;
+    for(int i=0;i<n;i++)cin >> values[i];
 
-  vector<int> answer(n+1);
+    sort(all(values));
 
-  answer[n] = helper(1,n);
-  answer[1] = answer[n] - helper(2,n);
+    int l = 0, r = n+1;
 
-  for(ll i=2;i<n;i++)answer[i] = helper(i-1,i) - answer[i-1];
-  for(ll i=1;i<n;i++)answer[n] -= answer[i];
-  cout << "!";
-  for(ll i=1;i<=n;i++)cout << " " << answer[i];
-  cout << endl;
+    while(r-l > 1){
+        ll mid = (r+l)>>1;
+        bool flag = true;
+        if((2*mid+1) > n){
+            flag = false;
+        }else{
+            ll spos = 0, lpos = n - (mid+1);
+            vector<int> b;
+            for(int i=0;i<(2*mid+1);i++){
+                if(i%2 == 0){
+                    b.emplace_back(values[lpos]);
+                    lpos++;
+                }else{
+                    b.emplace_back(values[spos]);
+                    spos++;
+                }
+            }
 
+            for(int i=1;i<(2*mid+1);i += 2){
+                if(b[i]>=b[i-1] || b[i]>=b[i+1]){
+                    flag = false;
+                    break;
+                }
+            }
+        }
+
+        if(flag)l = mid;
+        else r = mid;
+    }
+
+    cout << l << endl;
+    vector<ll> ans;
+    ll spos = 0, hpos = n - (l+1);
+    for(int i=0;i<2*l+1;i++){
+        if(i%2 == 0){
+            ans.emplace_back(values[hpos]);
+            hpos++;
+        }else{
+            ans.emplace_back(values[spos]);
+            spos++;
+        }
+    }
+
+    for(int i=spos;i<(n-l-1);i++){
+        ans.emplace_back(values[i]);
+    }
+
+    for(auto child:ans)cout << child << " ";
+    // cout << endl;
 }
 
 int32_t main() {

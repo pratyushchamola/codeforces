@@ -10,7 +10,7 @@ using namespace chrono;
 #define MOD 1000000007
 #define MOD1 998244353
 #define INF 1e18
-// #define endl "\n"
+#define endl "\n"
 #define pb push_back
 #define ppb pop_back
 #define mp make_pair
@@ -221,30 +221,51 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-int helper(int l,int r){
-    cout << "? " << l << " " << r << endl;
-    int val;
-    cin >> val;
-
-    return val;
-}
 
 void solve() {
 
-  ll n;
-  cin >> n;
+  // for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
+  int t;
+  cin >> t;
+  while (t--)
+  {
+   ll n,k;
+   cin >> n >> k;
 
-  vector<int> answer(n+1);
+   vector<ll> a(n);
+   for(int i=0;i<n;i++){
+       cin >> a[i];
+   } 
 
-  answer[n] = helper(1,n);
-  answer[1] = answer[n] - helper(2,n);
+   stack<ll> st;
+   for(int i=n-1;i>=0;i--){
+       st.push(a[i]);
+   }
 
-  for(ll i=2;i<n;i++)answer[i] = helper(i-1,i) - answer[i-1];
-  for(ll i=1;i<n;i++)answer[n] -= answer[i];
-  cout << "!";
-  for(ll i=1;i<=n;i++)cout << " " << answer[i];
-  cout << endl;
+   ll ans = 0;
+   ll kk = k;
+   ll prevsum = st.size();
+   bool flag = false;
+   set<ll> s;
+   while(st.size()>0){
+       s.clear();
+       while((st.size()>0) and ((s.find(st.top()) != s.end()) || (s.size()<k))){
+           s.insert(st.top());
+           st.pop();
+       }
 
+       if(prevsum == st.size()){
+           flag = true;
+           break;
+       }
+       prevsum = st.size();
+       ans++;
+       if(kk == k)k--;
+   }
+
+   if(flag)cout << -1 << endl;
+   else cout << ans << endl;
+  }
 }
 
 int32_t main() {

@@ -10,7 +10,7 @@ using namespace chrono;
 #define MOD 1000000007
 #define MOD1 998244353
 #define INF 1e18
-// #define endl "\n"
+#define endl "\n"
 #define pb push_back
 #define ppb pop_back
 #define mp make_pair
@@ -93,23 +93,23 @@ void sieve() {
 //    fcnt.resize(N);
  
     prime[1] = false;
-    for (int p = 2; p < N; p++) {
+    for (int p = 2; p*p <= N; p++) {
         if (prime[p]) {
             spf[p] = p;
-            for (int i = p + p; i <= N; i += p) {
+            for (int i = p*p; i <= N; i += p) {
                 prime[i] = false; // not prime
-                if (spf[i] == 0) {
-                    spf[i] = p; // first divisor of i
-                }
+                // if (spf[i] == 0) {
+                //     spf[i] = p; // first divisor of i
+                // }
             }
         }
     }
  
-    // for (int p = 2; p <= N; p++) { // storing primes
-    //     if (prime[p]) {
-    //         pr.pb(p);
-    //     }
-    // }
+    for (int p = 2; p <= N; p++) { // storing primes
+        if (prime[p]) {
+            pr.pb(p);
+        }
+    }
 //
 //    for (int i = 2; i < N; ++i) { // counting factors of i
 //        fcnt[i] = fcnt[i / spf[i]] + 1;
@@ -221,35 +221,37 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-int helper(int l,int r){
-    cout << "? " << l << " " << r << endl;
-    int val;
-    cin >> val;
+vector<ll> check(1e6+3,0);
+void precalc(){
+    check[0] = check[1] = 1;
 
-    return val;
+    // 1 means alone
 }
 
 void solve() {
 
-  ll n;
-  cin >> n;
+  // for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
+  int t;
+  cin >> t;
+  while (t--)
+  {
+   ll n;
+   cin >> n;
+   ll sqr = sqrt(n);
+   auto t1 = upper_bound(all(pr),sqr);
+   auto t2 = lower_bound(all(pr),n);
 
-  vector<int> answer(n+1);
+   if(*t2 != n)t2 = prev(t2);
 
-  answer[n] = helper(1,n);
-  answer[1] = answer[n] - helper(2,n);
-
-  for(ll i=2;i<n;i++)answer[i] = helper(i-1,i) - answer[i-1];
-  for(ll i=1;i<n;i++)answer[n] -= answer[i];
-  cout << "!";
-  for(ll i=1;i<=n;i++)cout << " " << answer[i];
-  cout << endl;
-
+   cout << (t2 - t1) + 2 << endl;
+    
+  }
 }
 
 int32_t main() {
   fastio();
   auto start1 = high_resolution_clock::now();
+  sieve();
   solve();
   auto stop1 = high_resolution_clock::now();
   auto duration = duration_cast<microseconds>(stop1 - start1);

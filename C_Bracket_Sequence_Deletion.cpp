@@ -10,7 +10,7 @@ using namespace chrono;
 #define MOD 1000000007
 #define MOD1 998244353
 #define INF 1e18
-// #define endl "\n"
+#define endl "\n"
 #define pb push_back
 #define ppb pop_back
 #define mp make_pair
@@ -221,30 +221,54 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-int helper(int l,int r){
-    cout << "? " << l << " " << r << endl;
-    int val;
-    cin >> val;
-
-    return val;
-}
 
 void solve() {
 
-  ll n;
-  cin >> n;
+  // for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
+  int t;
+  cin >> t;
+  while (t--)
+  {
+    ll n;
+        cin >> n;
 
-  vector<int> answer(n+1);
+        string s;
+        cin >> s;
 
-  answer[n] = helper(1,n);
-  answer[1] = answer[n] - helper(2,n);
+        ll ans = 0;
+        ll ii = -1;
 
-  for(ll i=2;i<n;i++)answer[i] = helper(i-1,i) - answer[i-1];
-  for(ll i=1;i<n;i++)answer[n] -= answer[i];
-  cout << "!";
-  for(ll i=1;i<=n;i++)cout << " " << answer[i];
-  cout << endl;
+        vector<ll> arr;
 
+        for(int i=0;i<n;i++){
+            if(s[i] == ')')arr.push_back(i);
+        }
+        for(int i=0;i<n;i++){
+            if((i < n-1) and (s[i] == s[i+1])){
+                ans++;
+                i++;
+            }else if(s[i] == '(' and (i<(n-1)) and s[i+1] == ')'){
+                ans++;
+                i++;
+            }else if(s[i] == ')'){
+                ll ind = upper_bound(arr.begin(),arr.end(),i) - arr.begin();
+                // cout << "ind " << ind << endl;
+                if(ind == arr.size()){
+                    ii = i;
+                    // cout << "ii " << ii << endl;
+                    break;
+                }
+                ans++;
+                i = arr[ind];
+            }else if(i == n-1){
+                ii = n-1;
+            }
+        }
+
+        cout << ans << " ";
+        if(ii != -1)cout << (s.size() - ii) << endl;
+        else cout << 0 << endl;
+  }
 }
 
 int32_t main() {

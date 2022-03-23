@@ -10,7 +10,7 @@ using namespace chrono;
 #define MOD 1000000007
 #define MOD1 998244353
 #define INF 1e18
-// #define endl "\n"
+#define endl "\n"
 #define pb push_back
 #define ppb pop_back
 #define mp make_pair
@@ -221,35 +221,59 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-int helper(int l,int r){
-    cout << "? " << l << " " << r << endl;
-    int val;
-    cin >> val;
-
-    return val;
-}
 
 void solve() {
 
-  ll n;
-  cin >> n;
+  // for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
+  int t;
+  cin >> t;
+  while (t--)
+  {
+   int n,l;
+   cin >> n >> l;
 
-  vector<int> answer(n+1);
+   vector<int> a(n);
 
-  answer[n] = helper(1,n);
-  answer[1] = answer[n] - helper(2,n);
+   for(int i=0;i<n;i++)cin >> a[i];
 
-  for(ll i=2;i<n;i++)answer[i] = helper(i-1,i) - answer[i-1];
-  for(ll i=1;i<n;i++)answer[n] -= answer[i];
-  cout << "!";
-  for(ll i=1;i<=n;i++)cout << " " << answer[i];
-  cout << endl;
+   int sa = 1, sb = 1;
+   ll i = 0, j = n-1;
+   double dista = 0, distb = l;
+   double ans = 0;
+   while(i<=j){
+       double acurd = a[i] - dista;
+       double bcurd = distb - a[j];
+       double ta = acurd*1.0/sa;
+       double tb = bcurd*1.0/sb;
 
+       if(ta<=tb){
+           dista += acurd;
+           i++;
+           distb -= ta*1.0*sb;
+           sa++;
+           ans += ta;
+       }else{
+           distb -= bcurd;
+           dista += tb*1.0*sa;
+           ans += tb;
+           sb++;
+           j--;
+       }
+   }
+
+   double d = distb - dista;
+   sa += sb;
+   ans += d*1.0/sa;
+   cout << ans << endl;
+
+    
+  }
 }
 
 int32_t main() {
   fastio();
   auto start1 = high_resolution_clock::now();
+  precision(10);
   solve();
   auto stop1 = high_resolution_clock::now();
   auto duration = duration_cast<microseconds>(stop1 - start1);

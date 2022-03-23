@@ -10,7 +10,7 @@ using namespace chrono;
 #define MOD 1000000007
 #define MOD1 998244353
 #define INF 1e18
-// #define endl "\n"
+#define endl "\n"
 #define pb push_back
 #define ppb pop_back
 #define mp make_pair
@@ -221,30 +221,47 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-int helper(int l,int r){
-    cout << "? " << l << " " << r << endl;
-    int val;
-    cin >> val;
-
-    return val;
-}
 
 void solve() {
 
-  ll n;
-  cin >> n;
+  // for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
+  int t;
+  cin >> t;
+  while (t--)
+  {
+    ll n;
+    cin >> n;
 
-  vector<int> answer(n+1);
+    vector<ll> a(n), b(n);
 
-  answer[n] = helper(1,n);
-  answer[1] = answer[n] - helper(2,n);
+    for(int i=0;i<n;i++){
+        cin >> a[i];
+        b[i] = a[i];
+    }
 
-  for(ll i=2;i<n;i++)answer[i] = helper(i-1,i) - answer[i-1];
-  for(ll i=1;i<n;i++)answer[n] -= answer[i];
-  cout << "!";
-  for(ll i=1;i<=n;i++)cout << " " << answer[i];
-  cout << endl;
+    sort(b.begin(),b.end());
 
+    map<ll,ll> s;
+    for(int i=0;i<n;i++){
+        if(a[i]%b[0] == 0)s[a[i]] = 1;
+    }
+
+    bool flag = false;
+
+    for(int i=0;i<n;i++){
+        if(a[i] == b[i])continue;
+        else{
+            if(s[a[i]] == 1 and s[b[i]]==1)continue;
+            else{
+                flag = true;
+                break;
+            }
+        }
+    }
+
+    if(flag)cout << "NO" << endl;
+    else cout << "YES" << endl;
+  }
 }
 
 int32_t main() {

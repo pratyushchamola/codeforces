@@ -10,7 +10,7 @@ using namespace chrono;
 #define MOD 1000000007
 #define MOD1 998244353
 #define INF 1e18
-// #define endl "\n"
+#define endl "\n"
 #define pb push_back
 #define ppb pop_back
 #define mp make_pair
@@ -221,30 +221,39 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-int helper(int l,int r){
-    cout << "? " << l << " " << r << endl;
-    int val;
-    cin >> val;
-
-    return val;
-}
 
 void solve() {
 
-  ll n;
-  cin >> n;
+  // for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
+  int t;
+  cin >> t;
+  while (t--)
+  {
+   ll n;
+   cin >> n;
 
-  vector<int> answer(n+1);
+   ll a = 0, b = 0;
+   bool flag = true;
 
-  answer[n] = helper(1,n);
-  answer[1] = answer[n] - helper(2,n);
+   while(n>0){
 
-  for(ll i=2;i<n;i++)answer[i] = helper(i-1,i) - answer[i-1];
-  for(ll i=1;i<n;i++)answer[n] -= answer[i];
-  cout << "!";
-  for(ll i=1;i<=n;i++)cout << " " << answer[i];
-  cout << endl;
+       if(((n>4) && (n%4 == 0)) || (n%2==1)){
+           if(flag)a += 1;
+           else b += 1;
 
+           n--;
+       }else{
+           if(flag)a += n>>1;
+           else b += n>>1;
+
+           n -= n>>1;
+       }
+
+       flag = !flag;
+   } 
+
+   cout << a << endl;
+  }
 }
 
 int32_t main() {

@@ -221,30 +221,40 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-int helper(int l,int r){
-    cout << "? " << l << " " << r << endl;
-    int val;
-    cin >> val;
-
-    return val;
-}
 
 void solve() {
+    ll n;
+    cin >> n;
 
-  ll n;
-  cin >> n;
+    set<ll> s;
+    for(int i=1;i<=n;i++)s.insert(i);
+    vector<ll> a(n+1);
 
-  vector<int> answer(n+1);
+    ll i = 1, j = n;
 
-  answer[n] = helper(1,n);
-  answer[1] = answer[n] - helper(2,n);
+    while(i<j){
+        cout << "? " << i << " " << j << endl;
+        ll val1 , val2;
+        cin >> val1;
+        cout << "? " << j << " " << i << endl;
+        cin >> val2;
 
-  for(ll i=2;i<n;i++)answer[i] = helper(i-1,i) - answer[i-1];
-  for(ll i=1;i<n;i++)answer[n] -= answer[i];
-  cout << "!";
-  for(ll i=1;i<=n;i++)cout << " " << answer[i];
-  cout << endl;
+        if(val1>val2){
+            a[i] = val1;
+            s.erase(s.find(val1));
+            i++; 
+        }else{
+            a[j] = val2;
+            j--;
+            s.erase(s.find(val2));
+        }
+    }
 
+    a[i] = *s.begin();
+
+    cout << "! ";
+    for(ll child=1;child<=n;child++)cout << a[child] << " ";
+    cout << endl;
 }
 
 int32_t main() {

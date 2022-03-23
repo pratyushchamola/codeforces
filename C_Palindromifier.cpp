@@ -10,7 +10,7 @@ using namespace chrono;
 #define MOD 1000000007
 #define MOD1 998244353
 #define INF 1e18
-// #define endl "\n"
+#define endl "\n"
 #define pb push_back
 #define ppb pop_back
 #define mp make_pair
@@ -221,30 +221,34 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-int helper(int l,int r){
-    cout << "? " << l << " " << r << endl;
-    int val;
-    cin >> val;
+bool checkpalin(string s){
+    int l = 0, r = s.length() -1;
 
-    return val;
+    while(l <= r){
+        if(s[l] != s[r]){
+            return false;
+        }
+        l++;
+        r--;
+    }
+
+    return true;
 }
 
 void solve() {
 
-  ll n;
-  cin >> n;
+  string s;
+  cin >> s;
+  ll n = s.length();
 
-  vector<int> answer(n+1);
-
-  answer[n] = helper(1,n);
-  answer[1] = answer[n] - helper(2,n);
-
-  for(ll i=2;i<n;i++)answer[i] = helper(i-1,i) - answer[i-1];
-  for(ll i=1;i<n;i++)answer[n] -= answer[i];
-  cout << "!";
-  for(ll i=1;i<=n;i++)cout << " " << answer[i];
-  cout << endl;
-
+  if(checkpalin(s)){
+      cout << 0 << endl;
+      return;
+  }
+  cout << 3 << endl;
+  cout << "R " << n-1 << endl;
+  cout << "L " << n << endl;
+  cout << "L " << 2 << endl;
 }
 
 int32_t main() {

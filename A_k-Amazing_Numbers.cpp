@@ -10,7 +10,7 @@ using namespace chrono;
 #define MOD 1000000007
 #define MOD1 998244353
 #define INF 1e18
-// #define endl "\n"
+#define endl "\n"
 #define pb push_back
 #define ppb pop_back
 #define mp make_pair
@@ -221,30 +221,41 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-int helper(int l,int r){
-    cout << "? " << l << " " << r << endl;
-    int val;
-    cin >> val;
-
-    return val;
-}
-
+const static ll maxn = 3e5 + 5;
+vector<ll> f(maxn), ans(maxn), last(maxn),arr(maxn);
 void solve() {
 
-  ll n;
-  cin >> n;
+  // for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
+  int t;
+  cin >> t;
+  while (t--)
+  {
+   ll n;
+   cin >> n;
 
-  vector<int> answer(n+1);
+   for(int i=1;i<=n;i++){
+       last[i] = f[i] = arr[i] = 0;
+       ans[i] = -1;
+   }
+   
+   for(int i=1;i<=n;i++){
+       cin >> arr[i];
+       f[arr[i]] = max(f[arr[i]], i - last[arr[i]]);
+       last[arr[i]] = i;
+   } 
 
-  answer[n] = helper(1,n);
-  answer[1] = answer[n] - helper(2,n);
+   for(int i=1;i<=n;i++){
+       f[i] = max(f[i],n - last[i] + 1);
 
-  for(ll i=2;i<n;i++)answer[i] = helper(i-1,i) - answer[i-1];
-  for(ll i=1;i<n;i++)answer[n] -= answer[i];
-  cout << "!";
-  for(ll i=1;i<=n;i++)cout << " " << answer[i];
-  cout << endl;
+       for(int j=f[i];j<=n and ans[j]==-1;j++){
+           ans[j] = i;
+       }
+   }
 
+   for(int i=1;i<=n;i++)cout << ans[i] << " ";
+   cout << endl;
+
+  }
 }
 
 int32_t main() {

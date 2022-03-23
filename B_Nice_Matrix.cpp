@@ -10,7 +10,7 @@ using namespace chrono;
 #define MOD 1000000007
 #define MOD1 998244353
 #define INF 1e18
-// #define endl "\n"
+#define endl "\n"
 #define pb push_back
 #define ppb pop_back
 #define mp make_pair
@@ -221,30 +221,54 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-int helper(int l,int r){
-    cout << "? " << l << " " << r << endl;
-    int val;
-    cin >> val;
+ll calc(vector<ll>& arr){
+    int sz = arr.size();
+    sort(all(arr));
+    int ans = 0;
+    for(int i=0;i<sz;i++)ans += abs(arr[i] - arr[sz/2]);
 
-    return val;
+    return ans;
 }
 
 void solve() {
 
-  ll n;
-  cin >> n;
+  int t;
+  cin >> t;
+  while (t--)
+  {
+   ll n,m;
+   cin >> n >> m;
 
-  vector<int> answer(n+1);
+   vector<vector<ll>> matrix(n,vector<ll>(m,0));
 
-  answer[n] = helper(1,n);
-  answer[1] = answer[n] - helper(2,n);
+   for(ll i=0;i<n;i++){
+       for(ll j=0;j<m;j++){
+           cin >> matrix[i][j];
+       }
+   }
 
-  for(ll i=2;i<n;i++)answer[i] = helper(i-1,i) - answer[i-1];
-  for(ll i=1;i<n;i++)answer[n] -= answer[i];
-  cout << "!";
-  for(ll i=1;i<=n;i++)cout << " " << answer[i];
-  cout << endl;
+   int toprow = 0, botrow = n-1, leftcol = 0,rightcol = m-1;
+   int answer = 0;
+   while(toprow <= botrow){
+       leftcol = 0;
+       rightcol = m-1;
+       while(leftcol<=rightcol){
+           vector<ll> curvals = {matrix[toprow][leftcol]};
+           if(leftcol != rightcol)curvals.push_back({matrix[toprow][rightcol]});
+           if(toprow != botrow)curvals.push_back({matrix[botrow][leftcol]});
+           if(toprow != botrow && leftcol != rightcol)curvals.push_back({matrix[botrow][rightcol]});
 
+           answer += calc(curvals);  
+            leftcol++;
+            rightcol--;
+       }
+       toprow++;
+       botrow--;
+   }
+   
+   cout << answer << endl;
+
+  }
 }
 
 int32_t main() {
