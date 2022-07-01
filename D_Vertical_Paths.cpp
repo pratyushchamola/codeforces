@@ -221,18 +221,6 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-string tt = "abacaba";
-ll n;
-
-bool check(string str){
-    int cnt = 0;
-    for(int i=0;i+tt.size()<=n;i++){
-        if(str.substr(i,tt.size()) == tt)cnt++;
-    }
-
-    // cout << "cnt : " << cnt << endl;
-    return (cnt == 1);
-}
 
 void solve() {
 
@@ -241,37 +229,53 @@ void solve() {
   cin >> t;
   while (t--)
   {
-   cin >> n ;
-   string s;
-   cin >> s;
+   ll n;
+   cin >> n;
 
-   bool flag = true;
-   bool ans = false;
+   vector<ll> parents(n+1);
+   vector<bool> leaf(n+1,true);
 
-   for(int i=0;i+tt.size() <= n;i++){
-    string str = s;
-    flag = true;
-    for(int j=0;j<tt.size();j++){
-        if(str[i+j] != '?' && str[i+j] != tt[j]){
-            flag = false;
-            break;
-        }
-        str[i+j] = tt[j];
-    }
+   for(int i=1;i<=n;i++){
+       cin >> parents[i];
+       leaf[parents[i]] = false;
+   }
 
-    if(flag and check(str)){
-        for(int j=0;j<n;j++){
-            if(str[j] == '?' )str[j] = 'z';
-        }
-        ans = true;
-        s = str;
-        break;
-    }
+   if(n == 1){
+       cout << "1\n1\n1\n";
+       cout << endl;
+       continue;
+   }
+   ll ans = 0;
+   vector<ll> paths[n+1];
+   vector<bool> used(n+1,false);
+
+   for(int i=1;i<=n;i++){
+       if(!leaf[i])continue;
+    //    if(used[i])continue;
+
+    used[i] = true;
+    paths[ans].push_back(i);
+
+       ll v = i;
+       while((parents[v] != v) and !used[parents[v]]){
+        v = parents[v];
+        paths[ans].push_back(v);
+        used[v] = true;
+       }
+       ans++;
+   }
+
+   cout << ans << endl;
+
+   for(int i=0;i<=n;i++){
+       if(paths[i].size() == 0)continue;
+
+       reverse(all(paths[i]));
+       cout << paths[i].size() << endl;
+       for(auto child:paths[i])cout << child << " ";
+       cout << endl;
    } 
-
-   if(ans)cout << "YES" << endl << s << endl;
-   else cout << "NO" << endl;
-
+   cout << endl;
   }
 }
 

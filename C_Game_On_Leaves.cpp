@@ -221,18 +221,6 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-string tt = "abacaba";
-ll n;
-
-bool check(string str){
-    int cnt = 0;
-    for(int i=0;i+tt.size()<=n;i++){
-        if(str.substr(i,tt.size()) == tt)cnt++;
-    }
-
-    // cout << "cnt : " << cnt << endl;
-    return (cnt == 1);
-}
 
 void solve() {
 
@@ -241,37 +229,29 @@ void solve() {
   cin >> t;
   while (t--)
   {
-   cin >> n ;
-   string s;
-   cin >> s;
+   ll n,x;
+   cin >> n >> x;
 
-   bool flag = true;
-   bool ans = false;
+   ll a,b;
+   ll xcnt = 0;
+   for(int i=1;i<n;i++){
+    cin >> a >> b;
 
-   for(int i=0;i+tt.size() <= n;i++){
-    string str = s;
-    flag = true;
-    for(int j=0;j<tt.size();j++){
-        if(str[i+j] != '?' && str[i+j] != tt[j]){
-            flag = false;
-            break;
-        }
-        str[i+j] = tt[j];
-    }
+    if(a == x || b == x)xcnt++;
+   }
 
-    if(flag and check(str)){
-        for(int j=0;j<n;j++){
-            if(str[j] == '?' )str[j] = 'z';
-        }
-        ans = true;
-        s = str;
-        break;
-    }
+   ll left = n - xcnt - 1;
+
+   if(n == 1 || xcnt == 1)cout << "Ayush" << endl;
+   else{
+    ll turn = 0; // 0 is ayush and 1 ashish
+    if(left%2 == 1)turn = 1;
+    xcnt--;
+    if(xcnt%2 == 1)turn = 1 - turn;
+
+    if(turn)cout << "Ashish" << endl;
+    else cout << "Ayush" << endl;
    } 
-
-   if(ans)cout << "YES" << endl << s << endl;
-   else cout << "NO" << endl;
-
   }
 }
 

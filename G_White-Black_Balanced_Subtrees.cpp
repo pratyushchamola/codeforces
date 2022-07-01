@@ -221,17 +221,23 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-string tt = "abacaba";
-ll n;
+vector<ll> adj[5001];
+ll visited[5000] = {0};
+ll cnt = 0, wcnt = 0, bcnt = 0;
+string r;
 
-bool check(string str){
-    int cnt = 0;
-    for(int i=0;i+tt.size()<=n;i++){
-        if(str.substr(i,tt.size()) == tt)cnt++;
+ll dfs(int node){
+    // visited[node] = 1;
+    ll bal = (r[node] == 'W') ?  1 : -1;
+
+    for(auto child:adj[node]){
+        bal += dfs(child);
     }
 
-    // cout << "cnt : " << cnt << endl;
-    return (cnt == 1);
+    if(bal == 0)cnt++;
+
+    return bal;
+    
 }
 
 void solve() {
@@ -241,37 +247,34 @@ void solve() {
   cin >> t;
   while (t--)
   {
-   cin >> n ;
+   ll n;
+   cin >> n;
+
+   for(int i=1;i<=n;i++){
+       adj[i].clear();
+       visited[i] = 0;
+   }
+   cnt = bcnt = wcnt= 0;
+
+   vector<ll> a(n+1);
+
+   for(int i=2;i<=n;i++){
+       cin >> a[i];
+   }
+
    string s;
    cin >> s;
 
-   bool flag = true;
-   bool ans = false;
+   r = " " + s; 
 
-   for(int i=0;i+tt.size() <= n;i++){
-    string str = s;
-    flag = true;
-    for(int j=0;j<tt.size();j++){
-        if(str[i+j] != '?' && str[i+j] != tt[j]){
-            flag = false;
-            break;
-        }
-        str[i+j] = tt[j];
-    }
 
-    if(flag and check(str)){
-        for(int j=0;j<n;j++){
-            if(str[j] == '?' )str[j] = 'z';
-        }
-        ans = true;
-        s = str;
-        break;
-    }
+   for(int i=2;i<=n;i++){
+       adj[a[i]].push_back(i);
    } 
 
-   if(ans)cout << "YES" << endl << s << endl;
-   else cout << "NO" << endl;
+   dfs(1);
 
+   cout << cnt << endl;
   }
 }
 

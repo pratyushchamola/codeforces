@@ -221,18 +221,6 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-string tt = "abacaba";
-ll n;
-
-bool check(string str){
-    int cnt = 0;
-    for(int i=0;i+tt.size()<=n;i++){
-        if(str.substr(i,tt.size()) == tt)cnt++;
-    }
-
-    // cout << "cnt : " << cnt << endl;
-    return (cnt == 1);
-}
 
 void solve() {
 
@@ -241,36 +229,77 @@ void solve() {
   cin >> t;
   while (t--)
   {
-   cin >> n ;
-   string s;
-   cin >> s;
+   ll n;
+   cin >> n;
 
-   bool flag = true;
-   bool ans = false;
+   if((n%2 == 1) or (n<=3)){
+       cout << -1 << endl;
+       continue;
+   }
 
-   for(int i=0;i+tt.size() <= n;i++){
-    string str = s;
-    flag = true;
-    for(int j=0;j<tt.size();j++){
-        if(str[i+j] != '?' && str[i+j] != tt[j]){
-            flag = false;
-            break;
-        }
-        str[i+j] = tt[j];
-    }
 
-    if(flag and check(str)){
-        for(int j=0;j<n;j++){
-            if(str[j] == '?' )str[j] = 'z';
-        }
-        ans = true;
-        s = str;
-        break;
-    }
-   } 
+   // minimum
+   
 
-   if(ans)cout << "YES" << endl << s << endl;
-   else cout << "NO" << endl;
+   ll rem = n%6;
+   ll minans = 0;
+   bool flag = false;
+   if(rem%4 == 0){
+       minans = n/6 + rem/4;
+       flag = true;
+   }else{
+       ll nn = n;
+       nn -= rem;
+       
+       while(nn>0){
+           rem += min(nn,6*1ll);
+           nn -= min(nn,6*1ll);
+
+           if(rem%4 == 0){
+               minans = rem/4 + nn/6;
+               flag = true;
+               break;
+           }
+       }
+   }
+
+   if(!flag){
+       cout << -1 << endl;
+       continue;
+   }
+
+   cout << minans << " ";
+
+   ll maxans = 0;
+
+   flag = false;
+
+   rem = n%4;
+
+   if(rem%6 == 0){
+       maxans = n/4 + rem/6;
+       flag = true;
+   }else{
+       ll nn = n;
+       nn -= rem;
+
+       while(nn>0){
+           rem += min(nn,4*1ll);
+           nn -= min(nn,4*1ll);
+
+           if(rem%6 == 0){
+               maxans = rem/6 + nn/4;
+               flag = true;
+               break;
+           }
+       }
+   }
+
+   if(!flag){
+           cout << -1 << endl;
+           continue;
+       }
+       cout << maxans << endl;
 
   }
 }

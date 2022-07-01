@@ -221,17 +221,26 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-string tt = "abacaba";
-ll n;
+ll ans;
 
-bool check(string str){
-    int cnt = 0;
-    for(int i=0;i+tt.size()<=n;i++){
-        if(str.substr(i,tt.size()) == tt)cnt++;
+void findans(vector<ll>& a){
+    if(a.empty())return;
+    int n = a.size();
+    int last = 0;
+    for(int i=0;i<n;i++){
+        if(a[i] == a[0])last = i;
+        else break;
     }
 
-    // cout << "cnt : " << cnt << endl;
-    return (cnt == 1);
+    --a[last];
+    ++ans;
+    sort(a.rbegin(),a.rend());
+
+    for(int i=0;i<n;i++)--a[i];
+
+    while(!a.empty() and a.back() <= 0)a.pop_back();
+
+    findans(a);
 }
 
 void solve() {
@@ -241,36 +250,35 @@ void solve() {
   cin >> t;
   while (t--)
   {
-   cin >> n ;
-   string s;
-   cin >> s;
+   ans = 0;
+   ll n;
+   cin >> n;
 
-   bool flag = true;
-   bool ans = false;
+   vector<ll> arr(n);
+   ll cur;
+   for(int i=1;i<n;i++){
+    cin >> cur;
+    arr[--cur]++;
+   }
 
-   for(int i=0;i+tt.size() <= n;i++){
-    string str = s;
-    flag = true;
-    for(int j=0;j<tt.size();j++){
-        if(str[i+j] != '?' && str[i+j] != tt[j]){
-            flag = false;
-            break;
-        }
-        str[i+j] = tt[j];
-    }
+   arr.emplace_back(1);
 
-    if(flag and check(str)){
-        for(int j=0;j<n;j++){
-            if(str[j] == '?' )str[j] = 'z';
-        }
-        ans = true;
-        s = str;
-        break;
-    }
-   } 
+   sort(arr.rbegin(),arr.rend());
 
-   if(ans)cout << "YES" << endl << s << endl;
-   else cout << "NO" << endl;
+   while(!arr.empty() and arr.back() <= 0)arr.pop_back();
+   ll sz = arr.size();
+   for(int i=0;i<sz;i++){
+    arr[i] = arr[i] - (sz-i);
+    ++ans;
+   }
+
+   sort(arr.rbegin(),arr.rend());
+
+   while(!arr.empty() and arr.back() <= 0)arr.pop_back();
+
+   findans(arr);
+
+   cout << ans << endl;
 
   }
 }

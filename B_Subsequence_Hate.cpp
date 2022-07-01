@@ -221,18 +221,6 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-string tt = "abacaba";
-ll n;
-
-bool check(string str){
-    int cnt = 0;
-    for(int i=0;i+tt.size()<=n;i++){
-        if(str.substr(i,tt.size()) == tt)cnt++;
-    }
-
-    // cout << "cnt : " << cnt << endl;
-    return (cnt == 1);
-}
 
 void solve() {
 
@@ -241,37 +229,57 @@ void solve() {
   cin >> t;
   while (t--)
   {
-   cin >> n ;
-   string s;
-   cin >> s;
+    string s;
+    cin >> s;
 
-   bool flag = true;
-   bool ans = false;
+    vector<ll> a;
+    a.push_back(1);
 
-   for(int i=0;i+tt.size() <= n;i++){
-    string str = s;
-    flag = true;
-    for(int j=0;j<tt.size();j++){
-        if(str[i+j] != '?' && str[i+j] != tt[j]){
-            flag = false;
-            break;
+    ll n = s.size();
+    for(int i=1;i<n;i++){
+        if(s[i] == s[i-1])a.back() = a.back() + 1;
+        else{
+            a.push_back(1);
         }
-        str[i+j] = tt[j];
     }
 
-    if(flag and check(str)){
-        for(int j=0;j<n;j++){
-            if(str[j] == '?' )str[j] = 'z';
+    if(a.size() <= 2)cout << 0 << endl;
+    else{
+        ll ods = 0, evs = 0;
+
+        for(int i=0;i<a.size();i += 2)evs += a[i];
+        for(int i=1;i<a.size();i += 2)ods += a[i];
+
+        ll ans = INT_MAX;
+
+        ans = min(ans,evs);
+        ans = min(ans,ods);
+
+        vector<ll> prezero(n+1,0), preones(n+1,0);
+
+        for(int i=0;i<n;i++){
+            if(s[i] == '0')prezero[i+1] = prezero[i] + 1;
+            else prezero[i+1] = prezero[i];
+
+            if(s[i] == '1')preones[i+1] = preones[i] + 1;
+            else preones[i+1] = preones[i];
         }
-        ans = true;
-        s = str;
-        break;
-    }
-   } 
 
-   if(ans)cout << "YES" << endl << s << endl;
-   else cout << "NO" << endl;
+        for(int i=0;i<n;i++){
+            ll curans = preones[i+1] + (prezero[n] - prezero[i+1]);
 
+            ans = min(ans,curans);
+        }
+
+        for(int i=0;i<n;i++){
+            ll curans = prezero[i+1] + (preones[n] - preones[i+1]);
+
+            ans = min(ans,curans);
+        }
+
+        cout << ans << endl;
+
+    } 
   }
 }
 

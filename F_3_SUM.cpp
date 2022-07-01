@@ -221,18 +221,6 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-string tt = "abacaba";
-ll n;
-
-bool check(string str){
-    int cnt = 0;
-    for(int i=0;i+tt.size()<=n;i++){
-        if(str.substr(i,tt.size()) == tt)cnt++;
-    }
-
-    // cout << "cnt : " << cnt << endl;
-    return (cnt == 1);
-}
 
 void solve() {
 
@@ -241,37 +229,40 @@ void solve() {
   cin >> t;
   while (t--)
   {
-   cin >> n ;
-   string s;
-   cin >> s;
+   ll n;
+   cin >> n;
+   vector<int> arr(10);
+   int ch;
+   for(int i=0;i<n;i++){
+    cin >> ch;
+    arr[ch%10]++;
+   }
 
-   bool flag = true;
-   bool ans = false;
+   vector<ll> a;
 
-   for(int i=0;i+tt.size() <= n;i++){
-    string str = s;
-    flag = true;
-    for(int j=0;j<tt.size();j++){
-        if(str[i+j] != '?' && str[i+j] != tt[j]){
-            flag = false;
-            break;
-        }
-        str[i+j] = tt[j];
+   for(int i=0;i<10;i++){
+    for(int j=0;j<min(arr[i],3*1ll);j++){
+        a.push_back(i);
     }
+   }
 
-    if(flag and check(str)){
-        for(int j=0;j<n;j++){
-            if(str[j] == '?' )str[j] = 'z';
+   bool flag = false;
+
+   for(int i=0;i<a.size();i++){
+    for(int j=i+1;j<a.size();j++){
+        for(int k=j+1;k<a.size();k++){
+            if((a[i] + a[j] + a[k])%10 == 3 ){
+                flag = true;
+                break;
+            }
         }
-        ans = true;
-        s = str;
-        break;
+        if(flag)break;
     }
-   } 
-
-   if(ans)cout << "YES" << endl << s << endl;
-   else cout << "NO" << endl;
-
+    if(flag)break;
+   }
+      
+   if(flag)cout << "YES" << endl;
+   else cout << "NO" << endl; 
   }
 }
 

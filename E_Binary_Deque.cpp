@@ -221,18 +221,6 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-string tt = "abacaba";
-ll n;
-
-bool check(string str){
-    int cnt = 0;
-    for(int i=0;i+tt.size()<=n;i++){
-        if(str.substr(i,tt.size()) == tt)cnt++;
-    }
-
-    // cout << "cnt : " << cnt << endl;
-    return (cnt == 1);
-}
 
 void solve() {
 
@@ -241,37 +229,58 @@ void solve() {
   cin >> t;
   while (t--)
   {
-   cin >> n ;
-   string s;
-   cin >> s;
+   ll n, s;
+   cin >> n >> s;
 
-   bool flag = true;
-   bool ans = false;
-
-   for(int i=0;i+tt.size() <= n;i++){
-    string str = s;
-    flag = true;
-    for(int j=0;j<tt.size();j++){
-        if(str[i+j] != '?' && str[i+j] != tt[j]){
-            flag = false;
-            break;
-        }
-        str[i+j] = tt[j];
-    }
-
-    if(flag and check(str)){
-        for(int j=0;j<n;j++){
-            if(str[j] == '?' )str[j] = 'z';
-        }
-        ans = true;
-        s = str;
-        break;
-    }
+   vector<ll> a(n);
+   ll sum = 0;
+   for(int i=0;i<n;i++){
+    cin >> a[i];
+    sum += a[i];
    } 
 
-   if(ans)cout << "YES" << endl << s << endl;
-   else cout << "NO" << endl;
+   if(sum < s)cout << -1 << endl;
+   else{
+    vector<ll> presum(n+1,0), sufsum(n+1,0);
+    // presum[0] = (a[0] == 1) ? 1 : 0;
+    for(int i=0;i<n;i++)presum[i+1] = presum[i] + a[i];
+    for(int i=n-1;i>=0;i--)sufsum[i] = sufsum[i+1] + a[i];
 
+    ll high = n;
+    ll low = 0;
+    ll ans = 0;
+
+    // cout << presum[1] << " " << sufsum[n] << endl;
+    while(high >= low){
+        ll mid = (high + low)>>1;
+        ll left = sum;
+        ll maxleft = 0;
+        for(int i=0;i<=mid;i++){
+            left = sum;
+            left -= presum[i];
+            left -= sufsum[n - (mid - i)];
+
+            if(left == s){
+
+                // cout << "mid : " << mid << " left : " << left << endl;
+                // flag = true;
+                break;
+            }
+            maxleft = max(maxleft,left);
+        }
+
+        if(left == s){
+            ans = mid;
+            high = mid-1;
+        }else if(maxleft < s){
+            high = mid - 1;
+        }else low = mid+1;
+    }
+
+    cout << ans << endl;
+
+
+   }
   }
 }
 

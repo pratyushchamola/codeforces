@@ -221,57 +221,81 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-string tt = "abacaba";
-ll n;
+ll merge(ll a[],ll temp[],ll left,ll mid,ll right){
+    ll x,y,z;
+    x = left;
+    y = mid;
+    z = left;
 
-bool check(string str){
-    int cnt = 0;
-    for(int i=0;i+tt.size()<=n;i++){
-        if(str.substr(i,tt.size()) == tt)cnt++;
+    ll cnt = 0;
+
+    while((x<mid) and (y<=right)){
+        if(a[x] <= a[y]){
+            temp[z++] = a[x++]; 
+        }else{
+            temp[z++] = a[y++];
+            cnt += (mid-x);
+        }
     }
 
-    // cout << "cnt : " << cnt << endl;
-    return (cnt == 1);
+    while(x<mid){
+        temp[z++] = a[x++];
+    }
+
+    while(y<=right){
+        temp[z++] = a[y++];
+    }
+
+    for(int i=left;i<=right;i++){
+        a[i] = temp[i];
+    }
+
+    return cnt;
 }
+
+ll mergesort(ll a[],ll temp[],int left,int right){
+    ll mid = 0;
+    ll cnt = 0;
+    if(left<right){
+        mid = (left+right)>>1;
+        cnt = mergesort(a,temp,left,mid);
+        cnt += mergesort(a,temp,mid+1,right);
+        cnt += merge(a,temp,left,mid+1,right);
+    }
+
+    return cnt;
+}
+
+ll cntInversions(ll a[],int n){
+    ll temp[n];
+    return mergesort(a,temp,0,n-1);
+}
+
 
 void solve() {
 
-  // for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
   int t;
   cin >> t;
   while (t--)
   {
-   cin >> n ;
-   string s;
-   cin >> s;
+   ll n;
+   cin >> n;
 
-   bool flag = true;
-   bool ans = false;
+   ll a[n];
 
-   for(int i=0;i+tt.size() <= n;i++){
-    string str = s;
-    flag = true;
-    for(int j=0;j<tt.size();j++){
-        if(str[i+j] != '?' && str[i+j] != tt[j]){
-            flag = false;
-            break;
-        }
-        str[i+j] = tt[j];
-    }
+   for(int i=0;i<n;i++)cin >> a[i];
 
-    if(flag and check(str)){
-        for(int j=0;j<n;j++){
-            if(str[j] == '?' )str[j] = 'z';
-        }
-        ans = true;
-        s = str;
-        break;
-    }
-   } 
+   ll ans = cntInversions(a,n);
 
-   if(ans)cout << "YES" << endl << s << endl;
-   else cout << "NO" << endl;
+   ll curr = 1;
+   for(int i=1;i<n;i++){
+       if(a[i] != a[i-1]){ans += ((curr*(curr-1))>>1) ; curr = 1;}
+       else curr++;
+   }
 
+   ans += (curr*(curr-1)>>1);
+
+   cout << ans << endl;
   }
 }
 

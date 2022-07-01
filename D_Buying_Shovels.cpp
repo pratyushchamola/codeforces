@@ -221,18 +221,6 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-string tt = "abacaba";
-ll n;
-
-bool check(string str){
-    int cnt = 0;
-    for(int i=0;i+tt.size()<=n;i++){
-        if(str.substr(i,tt.size()) == tt)cnt++;
-    }
-
-    // cout << "cnt : " << cnt << endl;
-    return (cnt == 1);
-}
 
 void solve() {
 
@@ -241,37 +229,24 @@ void solve() {
   cin >> t;
   while (t--)
   {
-   cin >> n ;
-   string s;
-   cin >> s;
+   ll n,k;
+   cin >> n >> k;
 
-   bool flag = true;
-   bool ans = false;
+   ll ans = n;
 
-   for(int i=0;i+tt.size() <= n;i++){
-    string str = s;
-    flag = true;
-    for(int j=0;j<tt.size();j++){
-        if(str[i+j] != '?' && str[i+j] != tt[j]){
-            flag = false;
-            break;
+   for(int i=1;i*i <= n;i++){
+    if(n%i == 0){
+        if(i<=k){
+            ans = min(ans,n/i);
         }
-        str[i+j] = tt[j];
-    }
 
-    if(flag and check(str)){
-        for(int j=0;j<n;j++){
-            if(str[j] == '?' )str[j] = 'z';
+        if((n/i) <= k){
+            ans = min(ans,i);
         }
-        ans = true;
-        s = str;
-        break;
     }
-   } 
+   }
 
-   if(ans)cout << "YES" << endl << s << endl;
-   else cout << "NO" << endl;
-
+   cout << ans << endl; 
   }
 }
 

@@ -140,11 +140,13 @@ struct DSU
     ll n;
     vector<int> p;
     vector<int> sz;
+    vector<ll> rank;
     DSU(int N)
     {
         n = N;
         p.assign(n + 1,-1);
         sz.assign(n+1,1);
+        rank.assign(n+1,0);
         for (int i = 0;i<=n;i++)p[i] = i;
     }
     ll Find(int i)
@@ -155,7 +157,17 @@ struct DSU
     void Merge(int a,int b)
     {
         a = Find(a),b = Find(b);
-        if (a != b)p[b] = a;
+
+        if(rank[a] > rank[b]){
+            p[b] = a;
+            rank[a]++;
+            sz[a] += sz[b];
+        }else{
+            p[a] = b;
+            rank[b]++;
+            sz[b] += sz[a];
+        }
+        // if (a != b)p[b] = a;
     }
 int getSize(int x)
     {
@@ -221,18 +233,6 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-string tt = "abacaba";
-ll n;
-
-bool check(string str){
-    int cnt = 0;
-    for(int i=0;i+tt.size()<=n;i++){
-        if(str.substr(i,tt.size()) == tt)cnt++;
-    }
-
-    // cout << "cnt : " << cnt << endl;
-    return (cnt == 1);
-}
 
 void solve() {
 
@@ -241,36 +241,57 @@ void solve() {
   cin >> t;
   while (t--)
   {
-   cin >> n ;
-   string s;
-   cin >> s;
+   ll n;
+   cin >> n;
 
-   bool flag = true;
-   bool ans = false;
+   vector<ll> a(n), b(n), c(n);
 
-   for(int i=0;i+tt.size() <= n;i++){
-    string str = s;
-    flag = true;
-    for(int j=0;j<tt.size();j++){
-        if(str[i+j] != '?' && str[i+j] != tt[j]){
-            flag = false;
-            break;
-        }
-        str[i+j] = tt[j];
-    }
+   for(int i=0;i<n;i++){
+       cin >> a[i];
+       a[i]--;
+   }
 
-    if(flag and check(str)){
-        for(int j=0;j<n;j++){
-            if(str[j] == '?' )str[j] = 'z';
-        }
-        ans = true;
-        s = str;
-        break;
-    }
-   } 
+   for(int i=0;i<n;i++){
+       cin >> b[i];
+       b[i]--;
+   }
 
-   if(ans)cout << "YES" << endl << s << endl;
-   else cout << "NO" << endl;
+   for(int i=0;i<n;i++){
+       cin >> c[i];
+       c[i]--;
+   }
+
+   set<ll> s;
+
+   DSU ds(n);
+
+   for(int i=0;i<n;i++){
+       if(a[i] == b[i])s.insert(a[i]);
+       
+       ds.Merge(a[i],b[i]);
+   }
+
+   for(int i=0;i<n;i++){
+       if(c[i] == -1)continue;
+
+       ll par = ds.Find(c[i]);
+       s.insert(par);
+   }
+
+   ll ans = 1;
+
+   for(int i=0;i<n;i++){
+       ll par = ds.Find(i);
+
+       if(s.find(par) == s.end()){
+           ans = ans*2;
+           ans = ans%MOD;
+           s.insert(par);
+       }
+   }
+
+   cout << ans << endl;
+
 
   }
 }

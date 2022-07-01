@@ -221,18 +221,6 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-string tt = "abacaba";
-ll n;
-
-bool check(string str){
-    int cnt = 0;
-    for(int i=0;i+tt.size()<=n;i++){
-        if(str.substr(i,tt.size()) == tt)cnt++;
-    }
-
-    // cout << "cnt : " << cnt << endl;
-    return (cnt == 1);
-}
 
 void solve() {
 
@@ -241,37 +229,50 @@ void solve() {
   cin >> t;
   while (t--)
   {
-   cin >> n ;
-   string s;
-   cin >> s;
+   ll n;
+   cin >> n;
+   vector<ll> a(n), cnt2(n+1,0);
 
-   bool flag = true;
-   bool ans = false;
+   for(int i=0;i<n;i++)cin >> a[i];
 
-   for(int i=0;i+tt.size() <= n;i++){
-    string str = s;
-    flag = true;
-    for(int j=0;j<tt.size();j++){
-        if(str[i+j] != '?' && str[i+j] != tt[j]){
-            flag = false;
-            break;
-        }
-        str[i+j] = tt[j];
-    }
-
-    if(flag and check(str)){
-        for(int j=0;j<n;j++){
-            if(str[j] == '?' )str[j] = 'z';
-        }
-        ans = true;
-        s = str;
-        break;
-    }
+   for(int i=0;i<n;i++){
+    if(abs(a[i]) == 2)cnt2[i+1] = 1;
+    cnt2[i+1] += cnt2[i];
    } 
 
-   if(ans)cout << "YES" << endl << s << endl;
-   else cout << "NO" << endl;
+   ll last_zero = -1, lastneg = -1, anscnt = 0, totzero = 0;
+   pair<ll,ll> ans;
+   ans = {n,0};
 
+   for(int i=0;i<n;i++){
+    if(a[i] == 0){
+        last_zero = i;
+        lastneg = -1;
+        totzero = 0;
+    }else{
+        if(a[i] < 0){
+            totzero++;
+
+            if(lastneg == -1)lastneg = i;
+        }
+
+        if(totzero%2 == 0){
+            ll twocnt = cnt2[i+1] - ((last_zero == -1) ? 0 : cnt2[last_zero+1]);
+            if(twocnt > anscnt){
+                anscnt = twocnt;
+                ans = {last_zero+1,n-i-1};
+            }
+        }else{
+            ll twocnt = cnt2[i+1] - cnt2[lastneg+1];
+            if(twocnt > anscnt){
+                anscnt = twocnt;
+                ans = {lastneg+1,n-i-1};
+            }
+        }
+    }
+   }
+
+   cout << ans.first << " " << ans.second << endl;
   }
 }
 

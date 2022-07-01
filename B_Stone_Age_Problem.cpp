@@ -221,57 +221,54 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-string tt = "abacaba";
-ll n;
-
-bool check(string str){
-    int cnt = 0;
-    for(int i=0;i+tt.size()<=n;i++){
-        if(str.substr(i,tt.size()) == tt)cnt++;
-    }
-
-    // cout << "cnt : " << cnt << endl;
-    return (cnt == 1);
-}
 
 void solve() {
 
-  // for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
-  int t;
-  cin >> t;
-  while (t--)
-  {
-   cin >> n ;
-   string s;
-   cin >> s;
+  ll n,q;
+  cin >> n >> q;
 
-   bool flag = true;
-   bool ans = false;
+  vector<ll> a(n),c(n);
 
-   for(int i=0;i+tt.size() <= n;i++){
-    string str = s;
-    flag = true;
-    for(int j=0;j<tt.size();j++){
-        if(str[i+j] != '?' && str[i+j] != tt[j]){
-            flag = false;
-            break;
-        }
-        str[i+j] = tt[j];
-    }
+  ll sum = 0;
 
-    if(flag and check(str)){
-        for(int j=0;j<n;j++){
-            if(str[j] == '?' )str[j] = 'z';
-        }
-        ans = true;
-        s = str;
-        break;
-    }
-   } 
+  for(int i=0;i<n;i++){
+      cin >> a[i];
+      sum += a[i];
+  }
 
-   if(ans)cout << "YES" << endl << s << endl;
-   else cout << "NO" << endl;
+  vector<ll> lastfirstquery(n,0), lastfirstqueryvalue(n,0);
+  ll lastsecondquery = 0, lastsecondqueryvalue = -1;
 
+  for(int i=0;i<n;i++)lastfirstqueryvalue[i] = a[i];
+
+  for(int i=1;i<=q;i++){
+      ll type;
+      cin >> type;
+
+      if(type == 2){
+          lastsecondquery = i;
+          ll dig;
+          cin >> dig;
+          lastsecondqueryvalue = dig;
+
+          sum = dig*n; 
+      }else{
+          ll ind,dig;
+          cin >> ind >> dig;
+          ind--;
+
+          if(lastsecondquery > lastfirstquery[ind]){
+              sum -= lastsecondqueryvalue;
+              sum += dig;
+          }else{
+              sum -= lastfirstqueryvalue[ind];
+              sum += dig;
+          }
+          lastfirstquery[ind] = i;
+          lastfirstqueryvalue[ind] = dig;
+      }
+
+      cout << sum << endl;
   }
 }
 

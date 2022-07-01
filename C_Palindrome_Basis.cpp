@@ -221,57 +221,65 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-string tt = "abacaba";
-ll n;
+static const ll maxn = 40004, m = 502;
+ll dp[maxn][m];
 
-bool check(string str){
-    int cnt = 0;
-    for(int i=0;i+tt.size()<=n;i++){
-        if(str.substr(i,tt.size()) == tt)cnt++;
+ll reversefunc(int n){
+    int res = 0;
+    while(n){
+        res = res*10 + n%10;
+        n = n/10;
     }
 
-    // cout << "cnt : " << cnt << endl;
-    return (cnt == 1);
+    return res;
+}
+
+int reverse(int n)
+{
+    int r=0;
+    while(n>0)
+    {
+        r=r*10+n%10;
+        n/=10;
+    }
+    return r;
+}
+
+bool palindrome(int n)
+{
+    return (reverse(n)==n); 
 }
 
 void solve() {
 
   // for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
+
+  vector<ll> palins;
+  palins.push_back(0);
+  for(int i=1;i<maxn;i++){
+    if(i == reversefunc(i))palins.push_back(i);
+  }
+  
+
+  for(int i=1;i<m;i++)dp[0][i] = 1;
+
+  for(int curnum=1;curnum<maxn;curnum++){
+    dp[curnum][0] = 0;
+    for(int curpalin=1;curpalin<m;curpalin++){
+        if(curnum >= palins[curpalin])dp[curnum][curpalin] = (dp[curnum][curpalin-1] + dp[curnum - palins[curpalin]][curpalin])%MOD;
+        else dp[curnum][curpalin] = dp[curnum][curpalin-1];
+    }
+  }
+
   int t;
   cin >> t;
+
   while (t--)
   {
-   cin >> n ;
-   string s;
-   cin >> s;
+   ll n;
+   cin >> n;
 
-   bool flag = true;
-   bool ans = false;
-
-   for(int i=0;i+tt.size() <= n;i++){
-    string str = s;
-    flag = true;
-    for(int j=0;j<tt.size();j++){
-        if(str[i+j] != '?' && str[i+j] != tt[j]){
-            flag = false;
-            break;
-        }
-        str[i+j] = tt[j];
-    }
-
-    if(flag and check(str)){
-        for(int j=0;j<n;j++){
-            if(str[j] == '?' )str[j] = 'z';
-        }
-        ans = true;
-        s = str;
-        break;
-    }
-   } 
-
-   if(ans)cout << "YES" << endl << s << endl;
-   else cout << "NO" << endl;
-
+   cout << dp[n][m-1] << endl; 
   }
 }
 

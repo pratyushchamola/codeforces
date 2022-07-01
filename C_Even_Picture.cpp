@@ -221,58 +221,30 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-string tt = "abacaba";
-ll n;
-
-bool check(string str){
-    int cnt = 0;
-    for(int i=0;i+tt.size()<=n;i++){
-        if(str.substr(i,tt.size()) == tt)cnt++;
-    }
-
-    // cout << "cnt : " << cnt << endl;
-    return (cnt == 1);
-}
 
 void solve() {
 
   // for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
-  int t;
-  cin >> t;
-  while (t--)
-  {
-   cin >> n ;
-   string s;
-   cin >> s;
+//   int t;
+//   cin >> t;
+//   while (t--)
+//   {
+   ll n;
+   cin >> n;
 
-   bool flag = true;
-   bool ans = false;
+   cout << (4 + 3*n) << endl;
 
-   for(int i=0;i+tt.size() <= n;i++){
-    string str = s;
-    flag = true;
-    for(int j=0;j<tt.size();j++){
-        if(str[i+j] != '?' && str[i+j] != tt[j]){
-            flag = false;
-            break;
-        }
-        str[i+j] = tt[j];
-    }
+   cout << "0 0 \n1 0" << endl;
+   ll k = 1;
+   while(n--){
+       cout << k-1 << " " << k << endl;
+       cout << k << " " << k << endl;
+       cout << k+1 << " " << k << endl;
+       k++; 
+   }
 
-    if(flag and check(str)){
-        for(int j=0;j<n;j++){
-            if(str[j] == '?' )str[j] = 'z';
-        }
-        ans = true;
-        s = str;
-        break;
-    }
-   } 
-
-   if(ans)cout << "YES" << endl << s << endl;
-   else cout << "NO" << endl;
-
-  }
+   cout << k-1 << " " << k << endl << k << " " << k << endl; 
+//   }
 }
 
 int32_t main() {

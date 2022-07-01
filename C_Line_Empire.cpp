@@ -221,18 +221,7 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-string tt = "abacaba";
-ll n;
 
-bool check(string str){
-    int cnt = 0;
-    for(int i=0;i+tt.size()<=n;i++){
-        if(str.substr(i,tt.size()) == tt)cnt++;
-    }
-
-    // cout << "cnt : " << cnt << endl;
-    return (cnt == 1);
-}
 
 void solve() {
 
@@ -241,37 +230,32 @@ void solve() {
   cin >> t;
   while (t--)
   {
-   cin >> n ;
-   string s;
-   cin >> s;
+   ll n, a, b;
+   cin >> n >> a >> b;
 
-   bool flag = true;
-   bool ans = false;
+   vector<ll> arr(n+1,0);
+   arr[0] = 0;
+   for(int i=1;i<=n;i++){
+    cin >> arr[i];
+   }
 
-   for(int i=0;i+tt.size() <= n;i++){
-    string str = s;
-    flag = true;
-    for(int j=0;j<tt.size();j++){
-        if(str[i+j] != '?' && str[i+j] != tt[j]){
-            flag = false;
-            break;
-        }
-        str[i+j] = tt[j];
-    }
-
-    if(flag and check(str)){
-        for(int j=0;j<n;j++){
-            if(str[j] == '?' )str[j] = 'z';
-        }
-        ans = true;
-        s = str;
+   ll ans = 0;
+   ll maxind = 0;
+   for(int i=1;i<=n;i++){
+    if(a <= b*i){
+        maxind = n - i;
         break;
     }
+   }
+
+   ll val = arr[maxind];
+   ans += (a+b)*val;
+
+   for(int i=maxind+1;i<=n;i++){
+    ans += b*(arr[i] - val);
    } 
 
-   if(ans)cout << "YES" << endl << s << endl;
-   else cout << "NO" << endl;
-
+   cout << ans << endl;
   }
 }
 

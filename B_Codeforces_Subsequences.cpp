@@ -221,58 +221,50 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-string tt = "abacaba";
-ll n;
-
-bool check(string str){
-    int cnt = 0;
-    for(int i=0;i+tt.size()<=n;i++){
-        if(str.substr(i,tt.size()) == tt)cnt++;
-    }
-
-    // cout << "cnt : " << cnt << endl;
-    return (cnt == 1);
-}
 
 void solve() {
 
-  // for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
-  int t;
-  cin >> t;
-  while (t--)
-  {
-   cin >> n ;
-   string s;
-   cin >> s;
+  ll n;
+  cin >> n;
 
-   bool flag = true;
-   bool ans = false;
+  ll ans = -1;
+  ll nn = 0;
 
-   for(int i=0;i+tt.size() <= n;i++){
-    string str = s;
-    flag = true;
-    for(int j=0;j<tt.size();j++){
-        if(str[i+j] != '?' && str[i+j] != tt[j]){
-            flag = false;
+  vector<ll> arr(10,1);
+
+    bool flag = false;
+    while(!flag){
+    ll curpwr = 1;
+    for(int i=0;i<10;i++)curpwr = curpwr*1ll*arr[i];
+    
+    if(curpwr>=n)break;
+
+    for(int i=0;i<10;i++){
+        // ll cur = arr[i]+1;
+        curpwr = curpwr/arr[i];
+        arr[i]++;
+        curpwr = curpwr*1ll*arr[i];
+
+        if(curpwr >= n){
+            flag = true;
             break;
         }
-        str[i+j] = tt[j];
-    }
-
-    if(flag and check(str)){
-        for(int j=0;j<n;j++){
-            if(str[j] == '?' )str[j] = 'z';
-        }
-        ans = true;
-        s = str;
-        break;
-    }
-   } 
-
-   if(ans)cout << "YES" << endl << s << endl;
-   else cout << "NO" << endl;
-
+    } 
   }
+
+  string str = "codeforces";
+  string toret = "";
+  
+  for(int i=0;i<10;i++){
+    toret += string(arr[i],str[i]);
+  }
+
+
+  cout << toret << endl;
+
+//   ccccccccooooooooddddddddeeeeeeeeffffffffoooooooorrrrrrrrcccccccceeeeeeeessssssss
+//   ccccccccooooooooddddddddeeeeeeefffffffooooooorrrrrrrccccccceeeeeeesssssss
+
 }
 
 int32_t main() {

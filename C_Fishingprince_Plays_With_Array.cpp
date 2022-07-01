@@ -221,18 +221,6 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-string tt = "abacaba";
-ll n;
-
-bool check(string str){
-    int cnt = 0;
-    for(int i=0;i+tt.size()<=n;i++){
-        if(str.substr(i,tt.size()) == tt)cnt++;
-    }
-
-    // cout << "cnt : " << cnt << endl;
-    return (cnt == 1);
-}
 
 void solve() {
 
@@ -241,37 +229,102 @@ void solve() {
   cin >> t;
   while (t--)
   {
-   cin >> n ;
-   string s;
-   cin >> s;
+   ll n,k;
+   cin >> n >> k;
 
-   bool flag = true;
-   bool ans = false;
+   vector<ll> a(n);
+   
+   stack<pair<ll,ll>> astack, bstack;
+   for(ll i=0;i<n;i++)cin >> a[i];
+   ll prev = a[0];
+   ll cnt = 1;
+   for(int i=1;i<n;i++){
+    if(a[i] == prev)cnt++;
+    else{
+        astack.push({prev,cnt});
+        prev = a[i];
+        cnt = 1;
+    }
+   }
 
-   for(int i=0;i+tt.size() <= n;i++){
-    string str = s;
-    flag = true;
-    for(int j=0;j<tt.size();j++){
-        if(str[i+j] != '?' && str[i+j] != tt[j]){
-            flag = false;
+   astack.push({prev,cnt});
+
+   ll m;
+   cin >> m;
+   vector<ll> b(m);
+   for(ll i=0;i<m;i++)cin >> b[i];
+
+   prev = b[0];
+   cnt = 1;
+   for(ll i=1;i<m;i++){
+    if(b[i] == prev)cnt++;
+    else{
+        bstack.push({prev,cnt});
+        prev = b[i];
+        cnt = 1;
+    }
+   }
+
+   bstack.push({prev,cnt});
+
+    bool flag = false;
+   while(astack.size() > 0 and bstack.size() > 0){
+    if(astack.top().first == bstack.top().first){
+
+        ll mn = min(astack.top().second,bstack.top().second);
+        astack.top().second -= mn;
+        bstack.top().second -= mn;
+    } else if(astack.top().first > bstack.top().first){
+        ll cur = astack.top().first;
+        astack.top().second--;
+        ll cnt = 1;
+        while((cur != bstack.top().first) and (cur%k == 0)){
+            cnt = cnt*k;
+            cur = cur/k;
+        }
+
+        if(cur != bstack.top().first){
+            flag = true;
             break;
         }
-        str[i+j] = tt[j];
-    }
 
-    if(flag and check(str)){
-        for(int j=0;j<n;j++){
-            if(str[j] == '?' )str[j] = 'z';
+        cnt--;
+
+        bstack.top().second--;
+
+        if(astack.top().second == 0)astack.pop();
+
+        astack.push({cur,cnt});
+    }else if(astack.top().first < bstack.top().first){
+        ll cur = bstack.top().first;
+        bstack.top().second--;
+        ll cnt = 1;
+        while(cur != astack.top().first and (cur%k == 0)){
+            cnt = cnt*k;
+            cur = cur/k;
         }
-        ans = true;
-        s = str;
-        break;
+
+        if(cur != astack.top().first){
+            flag = true;
+            break;
+        }
+
+        cnt--;
+        astack.top().second--;
+
+        if(bstack.top().second == 0)bstack.pop();
+        bstack.push({cur,cnt});
     }
+
+    if(astack.top().second <= 0)astack.pop();
+    if(bstack.top().second <= 0)bstack.pop();
+
+   }
+
+   if(flag || astack.size() > 0 || bstack.size() > 0)cout << "NO" << endl;
+   else{
+    cout << "YES" << endl;
    } 
-
-   if(ans)cout << "YES" << endl << s << endl;
-   else cout << "NO" << endl;
-
   }
 }
 

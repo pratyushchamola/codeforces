@@ -221,57 +221,55 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-string tt = "abacaba";
-ll n;
-
-bool check(string str){
-    int cnt = 0;
-    for(int i=0;i+tt.size()<=n;i++){
-        if(str.substr(i,tt.size()) == tt)cnt++;
-    }
-
-    // cout << "cnt : " << cnt << endl;
-    return (cnt == 1);
-}
-
+const static ll maxn = 1e5;
 void solve() {
 
-  // for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
-  int t;
-  cin >> t;
-  while (t--)
-  {
-   cin >> n ;
-   string s;
-   cin >> s;
+//   vector<ll> rest;
 
-   bool flag = true;
-   bool ans = false;
 
-   for(int i=0;i+tt.size() <= n;i++){
-    string str = s;
-    flag = true;
-    for(int j=0;j<tt.size();j++){
-        if(str[i+j] != '?' && str[i+j] != tt[j]){
-            flag = false;
+  ll n;
+  cin >> n;
+
+  vector<ll> a(n);
+  set<ll> ch;
+  for(int i=0;i<n;i++){
+    cin >> a[i];
+    ch.insert(a[i]);
+  }
+
+  priority_queue<ll,vector<ll>,greater<ll>> pq;
+
+//   ll k =0;
+  for(int i=0;i<=maxn;i++){
+    if(ch.size() > 0 and i == *ch.begin()){
+        ch.erase(*ch.begin());
+        continue;
+    }
+    pq.push(i);
+  }
+
+  bool flag = false;
+  vector<ll> b;
+  for(int i=0;i<n;i++){
+    if(i != 0 and a[i-1] != a[i])pq.push(a[i-1]);
+
+    if(pq.empty() == false){
+        if(pq.top() == a[i]){
+            flag = true;
             break;
         }
-        str[i+j] = tt[j];
-    }
-
-    if(flag and check(str)){
-        for(int j=0;j<n;j++){
-            if(str[j] == '?' )str[j] = 'z';
-        }
-        ans = true;
-        s = str;
+        b.push_back(pq.top());
+        pq.pop();
+    }else {
+        flag = true;
         break;
     }
-   } 
+  }
 
-   if(ans)cout << "YES" << endl << s << endl;
-   else cout << "NO" << endl;
-
+  if(flag)cout << -1 << endl;
+  else {
+    for(auto child:b)cout << child << " ";
+    cout << endl;
   }
 }
 

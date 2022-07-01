@@ -221,18 +221,6 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-string tt = "abacaba";
-ll n;
-
-bool check(string str){
-    int cnt = 0;
-    for(int i=0;i+tt.size()<=n;i++){
-        if(str.substr(i,tt.size()) == tt)cnt++;
-    }
-
-    // cout << "cnt : " << cnt << endl;
-    return (cnt == 1);
-}
 
 void solve() {
 
@@ -241,36 +229,137 @@ void solve() {
   cin >> t;
   while (t--)
   {
-   cin >> n ;
-   string s;
-   cin >> s;
+   ll n;
+   cin >> n;
+   string s,t;
+   cin >> s >> t;
 
-   bool flag = true;
-   bool ans = false;
+   vector<ll> arrs(3),arrt(3);
 
-   for(int i=0;i+tt.size() <= n;i++){
-    string str = s;
-    flag = true;
-    for(int j=0;j<tt.size();j++){
-        if(str[i+j] != '?' && str[i+j] != tt[j]){
-            flag = false;
-            break;
-        }
-        str[i+j] = tt[j];
-    }
-
-    if(flag and check(str)){
-        for(int j=0;j<n;j++){
-            if(str[j] == '?' )str[j] = 'z';
-        }
-        ans = true;
-        s = str;
+   for(int i=0;i<n;i++)arrs[s[i] - 'a']++; 
+   for(int i=0;i<n;i++)arrt[t[i] - 'a']++;
+   bool flag = false;
+   for(int i=0;i<3;i++){
+    if(arrs[i] != arrt[i]){
+        flag = true;
         break;
     }
-   } 
+   }
 
-   if(ans)cout << "YES" << endl << s << endl;
-   else cout << "NO" << endl;
+   if(flag){
+    cout << "NO" << endl;
+    continue;
+   }
+
+   vector<ll> a,b;
+
+   // a count
+   ll cnt = 0;
+   for(int i=0;i<n;i++){
+    if(s[i] == 'b'){
+        a.push_back(cnt);
+        cnt = 0;
+    }else if(s[i] == 'a')cnt++;
+   }
+
+   cnt = 0;
+
+   for(int i=0;i<n;i++){
+    if(t[i] == 'b'){
+        b.push_back(cnt);
+        cnt = 0;
+    }else if(t[i] == 'a')cnt++;
+   }
+
+   cnt = 0;
+   ll extra = 0;
+   flag = false;
+   for(int i=0;i<b.size();i++){
+    if(a[i] >= b[i])extra += a[i] - b[i];
+    else{
+        if(extra + a[i] >= b[i]){
+            extra -= (b[i] - a[i]);
+        }else {
+            flag = true;
+            break;
+        }
+    }
+   }
+
+   if(flag){
+    cout << "NO" << endl;
+    continue;
+   }
+
+   a.clear();
+   b.clear();
+   cnt = 0;
+   flag = false;
+
+   // c count
+   for(int i=n-1;i>=0;i--){
+    if(s[i] == 'b'){
+        a.push_back(cnt);
+        cnt = 0;
+    }else if(s[i] == 'c')cnt++;
+   }
+
+   cnt = 0;
+
+   for(int i=n-1;i>=0;i--){
+    if(t[i] == 'b'){
+        b.push_back(cnt);
+        cnt = 0;
+    }else if(t[i] == 'c')cnt++;
+   }
+
+   cnt = 0;
+   extra = 0;
+   flag = false;
+   for(int i=0;i<b.size();i++){
+    if(a[i] >= b[i])extra += a[i] - b[i];
+    else{
+        if(extra + a[i] >= b[i]){
+            extra -= (b[i] - a[i]);
+        }else {
+            flag = true;
+            break;
+        }
+    }
+   }
+
+   if(flag){
+    cout << "NO" << endl;
+    continue;
+   }
+
+   a.clear();
+   b.clear();
+   cnt = 0;
+   ll cnt2 = 0;
+   for(int i=0;i<n;i++){
+    if(s[i] == 'c'){
+        a.push_back(cnt);
+        cnt = 0;
+    }else if(s[i] == 'a')cnt++;
+
+    if(t[i] == 'c'){
+        b.push_back(cnt2);
+        cnt2 = 0;
+    }else if(t[i] == 'a')cnt2++;
+   }
+
+   flag = false;
+
+   for(int i=0;i<a.size();i++){
+    if(a[i] != b[i]){
+        flag = true;
+        break;
+    }
+   }
+
+   if(flag)cout << "NO" << endl;
+   else cout << "YES" << endl;
 
   }
 }

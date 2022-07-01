@@ -221,19 +221,8 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-string tt = "abacaba";
-ll n;
 
-bool check(string str){
-    int cnt = 0;
-    for(int i=0;i+tt.size()<=n;i++){
-        if(str.substr(i,tt.size()) == tt)cnt++;
-    }
-
-    // cout << "cnt : " << cnt << endl;
-    return (cnt == 1);
-}
-
+ll arr[200005] = {0};
 void solve() {
 
   // for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
@@ -241,36 +230,45 @@ void solve() {
   cin >> t;
   while (t--)
   {
-   cin >> n ;
-   string s;
-   cin >> s;
+   ll n,k;
+   cin >> n >> k;
 
-   bool flag = true;
-   bool ans = false;
+   vector<ll> a(n);
+   map<ll,ll> m;
 
-   for(int i=0;i+tt.size() <= n;i++){
-    string str = s;
-    flag = true;
-    for(int j=0;j<tt.size();j++){
-        if(str[i+j] != '?' && str[i+j] != tt[j]){
-            flag = false;
-            break;
-        }
-        str[i+j] = tt[j];
-    }
+   for(int i=0;i<n;i++){
+       cin >> a[i];
+       m[a[i]]++;
+   }
 
-    if(flag and check(str)){
-        for(int j=0;j<n;j++){
-            if(str[j] == '?' )str[j] = 'z';
-        }
-        ans = true;
-        s = str;
-        break;
-    }
-   } 
+   vector<ll> c;
 
-   if(ans)cout << "YES" << endl << s << endl;
-   else cout << "NO" << endl;
+   for(auto child:m){
+       if(child.second >= k)c.push_back(child.first);
+   }
+
+   if(c.size() == 0){
+       cout << -1 << endl;
+       continue;
+   }
+
+   sort(all(c));
+
+   ll mx = 0;
+   ll l = c[0], ansl = c[0], ansr = c[0];
+
+   for(int i=1;i<c.size();i++){
+       if((c[i]-1) == c[i-1]){
+           if(c[i]-l > mx){
+               ansl = l;
+               ansr = c[i];
+               mx = c[i] - l;
+           }
+       }else l = c[i];
+   }
+
+   cout << ansl << " " << ansr << endl;
+
 
   }
 }

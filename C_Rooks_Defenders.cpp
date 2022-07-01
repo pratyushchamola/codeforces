@@ -221,57 +221,61 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-string tt = "abacaba";
-ll n;
-
-bool check(string str){
-    int cnt = 0;
-    for(int i=0;i+tt.size()<=n;i++){
-        if(str.substr(i,tt.size()) == tt)cnt++;
-    }
-
-    // cout << "cnt : " << cnt << endl;
-    return (cnt == 1);
-}
 
 void solve() {
 
-  // for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
-  int t;
-  cin >> t;
-  while (t--)
-  {
-   cin >> n ;
-   string s;
-   cin >> s;
+  ll n,q;
+  cin >> n >> q;
 
-   bool flag = true;
-   bool ans = false;
+  set<ll> x,y;
 
-   for(int i=0;i+tt.size() <= n;i++){
-    string str = s;
-    flag = true;
-    for(int j=0;j<tt.size();j++){
-        if(str[i+j] != '?' && str[i+j] != tt[j]){
-            flag = false;
-            break;
-        }
-        str[i+j] = tt[j];
-    }
+  vector<ll> row(n+1,0), col(n+1,0);
 
-    if(flag and check(str)){
-        for(int j=0;j<n;j++){
-            if(str[j] == '?' )str[j] = 'z';
-        }
-        ans = true;
-        s = str;
-        break;
-    }
-   } 
+  for(int i=1;i<=(n+1);i++){
+      x.insert(i);
+      y.insert(i);
+  }
 
-   if(ans)cout << "YES" << endl << s << endl;
-   else cout << "NO" << endl;
+  for(int i=0;i<q;i++){
+      ll type;
+      cin >> type;
 
+      if(type == 1){
+          ll a,b;
+          cin >> a >> b;
+
+          if(row[a] == 0)x.erase(a);
+          if(col[b] == 0)y.erase(b);
+
+          row[a]++;
+          col[b]++;
+      }else if(type == 2){
+          ll a,b;
+          cin >> a >> b;
+
+          if(row[a] == 1)x.insert(a);
+          if(col[b] == 1)y.insert(b);
+
+          row[a]--;
+          col[b]--;
+      }else{
+          ll x1,y1,x2,y2;
+          cin >> x1 >> y1 >> x2 >> y2;
+
+          auto ptr = x.lower_bound(x1);
+          ll val = *ptr;
+
+          if(val <= x2){
+              auto p = y.lower_bound(y1);
+              ll v  = *p;
+
+              if(v <= y2){
+                  cout << "NO" << endl;
+              }else{
+                  cout << "YES" << endl;
+              }
+          }else cout << "YES" << endl;
+      }
   }
 }
 

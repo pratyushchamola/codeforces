@@ -221,57 +221,35 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-string tt = "abacaba";
-ll n;
-
-bool check(string str){
-    int cnt = 0;
-    for(int i=0;i+tt.size()<=n;i++){
-        if(str.substr(i,tt.size()) == tt)cnt++;
-    }
-
-    // cout << "cnt : " << cnt << endl;
-    return (cnt == 1);
-}
 
 void solve() {
 
   // for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
   int t;
   cin >> t;
+
+  ll arr[1005] = {0};
   while (t--)
   {
-   cin >> n ;
-   string s;
-   cin >> s;
+   ll n;
+   cin >> n;
 
-   bool flag = true;
-   bool ans = false;
+   vector<ll> a(n);
 
-   for(int i=0;i+tt.size() <= n;i++){
-    string str = s;
-    flag = true;
-    for(int j=0;j<tt.size();j++){
-        if(str[i+j] != '?' && str[i+j] != tt[j]){
-            flag = false;
-            break;
-        }
-        str[i+j] = tt[j];
-    }
+   for(int i=1;i<=1000;i++)arr[i] = 0;
 
-    if(flag and check(str)){
-        for(int j=0;j<n;j++){
-            if(str[j] == '?' )str[j] = 'z';
-        }
-        ans = true;
-        s = str;
-        break;
-    }
-   } 
+   for(int i=0;i<n;i++)cin >> a[i];
 
-   if(ans)cout << "YES" << endl << s << endl;
-   else cout << "NO" << endl;
+   multiset<ll> b;
+   ll ans = 0;
+   for(int i=0;i<n;i++){
+       for(int k=a[i];k<=1000;k++){
+           if(arr[k])ans += arr[k];
+       }
+       arr[a[i]]++;
+   }
 
+   cout << ans << endl; 
   }
 }
 

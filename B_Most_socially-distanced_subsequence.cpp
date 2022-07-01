@@ -221,18 +221,6 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-string tt = "abacaba";
-ll n;
-
-bool check(string str){
-    int cnt = 0;
-    for(int i=0;i+tt.size()<=n;i++){
-        if(str.substr(i,tt.size()) == tt)cnt++;
-    }
-
-    // cout << "cnt : " << cnt << endl;
-    return (cnt == 1);
-}
 
 void solve() {
 
@@ -241,36 +229,96 @@ void solve() {
   cin >> t;
   while (t--)
   {
-   cin >> n ;
-   string s;
-   cin >> s;
+   ll n;
+   cin >> n;
+
+   vector<ll> a(n);
+
+   for(int i=0;i<n;i++)cin >> a[i];
+
+   vector<ll> ans;
+   ans.push_back(a[0]);
+
+   // max min
+   ll curval = a[0];
 
    bool flag = true;
-   bool ans = false;
+   for(int i=1;i<n;i++){
+       if(flag){
+           if(a[i] >= curval)curval = a[i];
+            else{
+                ans.push_back(curval);
+                curval = a[i];
+                flag = false;
+            }
+       }else{
+           if(a[i] <= curval)curval = a[i];
+           else{
+               ans.push_back(curval);
+               curval = a[i];
+               flag = true;
+           }
+       }
+   }
 
-   for(int i=0;i+tt.size() <= n;i++){
-    string str = s;
-    flag = true;
-    for(int j=0;j<tt.size();j++){
-        if(str[i+j] != '?' && str[i+j] != tt[j]){
-            flag = false;
-            break;
-        }
-        str[i+j] = tt[j];
-    }
+   if(ans.back() != curval)ans.push_back(curval);
 
-    if(flag and check(str)){
-        for(int j=0;j<n;j++){
-            if(str[j] == '?' )str[j] = 'z';
-        }
-        ans = true;
-        s = str;
-        break;
-    }
-   } 
+   vector<ll> ans2;
+   ans2.push_back(a[0]);
 
-   if(ans)cout << "YES" << endl << s << endl;
-   else cout << "NO" << endl;
+   // min max
+
+   curval = a[0];
+   flag = true;
+   for(int i=1;i<n;i++){
+       if(flag){
+           if(a[i] <= curval)curval = a[i];
+           else{
+               ans2.push_back(curval);
+                curval = a[i];
+                flag = false;
+           }
+       }else{
+           if(a[i] >= curval)curval = a[i];
+           else{
+               ans2.push_back(curval);
+               curval = a[i];
+               flag = true;
+           }
+       }
+   }
+
+   if(ans2.back() != curval)ans2.push_back(curval);
+
+   ll val1 = 0 ;
+
+   for(int i=1;i<ans.size();i++){
+       val1 += abs(ans[i] - ans[i-1]);
+   }
+
+   ll val2 = 0;
+
+   for(int i=1;i<ans2.size();i++){
+       val2 += abs(ans2[i] - ans2[i-1]);
+   }
+
+   if(val1 > val2){
+       cout << ans.size() << endl;
+       for(auto child:ans)cout << child << " ";
+       cout << endl;
+   }else if(val2 > val1){
+       cout << ans2.size() << endl;
+       for(auto child:ans2)cout << child << " ";
+       cout << endl;
+   }else if(ans2.size() < ans.size()){
+       cout << ans2.size() << endl;
+       for(auto child:ans2)cout << child << " ";
+       cout << endl;
+   }else{
+       cout << ans.size() << endl;
+       for(auto child:ans)cout << child << " ";
+       cout << endl;
+   }
 
   }
 }

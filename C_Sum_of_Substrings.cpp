@@ -221,18 +221,6 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-string tt = "abacaba";
-ll n;
-
-bool check(string str){
-    int cnt = 0;
-    for(int i=0;i+tt.size()<=n;i++){
-        if(str.substr(i,tt.size()) == tt)cnt++;
-    }
-
-    // cout << "cnt : " << cnt << endl;
-    return (cnt == 1);
-}
 
 void solve() {
 
@@ -241,37 +229,33 @@ void solve() {
   cin >> t;
   while (t--)
   {
-   cin >> n ;
+   ll n, k;
+   cin >> n >> k;
    string s;
    cin >> s;
 
-   bool flag = true;
-   bool ans = false;
+   int firstone = n, lastone = -1;
+   int onecnt = 0;
+   for(int i=0;i<n;i++){
+    if(s[i] == '0')continue;
+    onecnt++;
+    if(firstone == n)firstone = i;
+    lastone  = i;
+   }
+   int ans = 0;
+   if(onecnt > 0 and ((n-1 - lastone) <= k)){
+    ans += 1;
+    onecnt--;
+    k -= (n-1 - lastone);
+   }
 
-   for(int i=0;i+tt.size() <= n;i++){
-    string str = s;
-    flag = true;
-    for(int j=0;j<tt.size();j++){
-        if(str[i+j] != '?' && str[i+j] != tt[j]){
-            flag = false;
-            break;
-        }
-        str[i+j] = tt[j];
-    }
+   if(onecnt > 0 and (firstone <= k)){
+    ans += 10;
+    onecnt--;
+    k -= firstone;
+   }
 
-    if(flag and check(str)){
-        for(int j=0;j<n;j++){
-            if(str[j] == '?' )str[j] = 'z';
-        }
-        ans = true;
-        s = str;
-        break;
-    }
-   } 
-
-   if(ans)cout << "YES" << endl << s << endl;
-   else cout << "NO" << endl;
-
+   cout << onecnt*11 + ans << endl;
   }
 }
 

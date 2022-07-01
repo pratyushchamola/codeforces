@@ -221,18 +221,6 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-string tt = "abacaba";
-ll n;
-
-bool check(string str){
-    int cnt = 0;
-    for(int i=0;i+tt.size()<=n;i++){
-        if(str.substr(i,tt.size()) == tt)cnt++;
-    }
-
-    // cout << "cnt : " << cnt << endl;
-    return (cnt == 1);
-}
 
 void solve() {
 
@@ -241,37 +229,64 @@ void solve() {
   cin >> t;
   while (t--)
   {
-   cin >> n ;
-   string s;
-   cin >> s;
+        string s;
+        cin >> s;
 
-   bool flag = true;
-   bool ans = false;
-
-   for(int i=0;i+tt.size() <= n;i++){
-    string str = s;
-    flag = true;
-    for(int j=0;j<tt.size();j++){
-        if(str[i+j] != '?' && str[i+j] != tt[j]){
-            flag = false;
-            break;
+        ll hour = 0;
+        int i = 0;
+        while (s[i] != ':') {
+            hour = hour * 10 + (s[i] - '0');
+            i++;
         }
-        str[i+j] = tt[j];
-    }
-
-    if(flag and check(str)){
-        for(int j=0;j<n;j++){
-            if(str[j] == '?' )str[j] = 'z';
+        i++;
+        ll min = 0;
+        while (i < s.size()) {
+            min = min * 10 + (s[i] - '0');
+            i++;
         }
-        ans = true;
-        s = str;
-        break;
-    }
-   } 
 
-   if(ans)cout << "YES" << endl << s << endl;
-   else cout << "NO" << endl;
+        int timespan;
+        cin >> timespan;
 
+        int hr = timespan / 60;
+        int mn = timespan % 60;
+
+        // cout << hour << " " << min << " " << timespan <<  endl;
+
+        map<string, ll> check;
+        string cur = "";
+        check[s] = 1;
+
+        ll ans = 0;
+        string checkstr = "";
+        ll cnt = 70;
+        while (checkstr != s) {
+            int curmin = (min + mn) % 60;
+            int curhr = ((hour + hr) + ((min + mn) >= 60 ? 1 : 0)) % 24;
+
+            min = curmin;
+            hour = curhr;
+
+            // cout << hour << " " << min << endl;
+
+            checkstr = "";
+            if (hour < 10)checkstr +=  '0';
+            checkstr += to_string(hour);
+            checkstr += ':';
+            if (curmin < 10)checkstr += '0';
+            checkstr += to_string(min);
+
+            // cout << checkstr << endl;
+
+            string rep = checkstr;
+            reverse(rep.begin(), rep.end());
+
+            if (rep == checkstr)ans++;
+
+            // check[checkstr] = 1;
+        }
+
+        cout << ans << endl; 
   }
 }
 

@@ -221,17 +221,19 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-string tt = "abacaba";
-ll n;
+bool checkpossible(int cntzero,vector<ll>& pref,vector<ll>& suff,int curonecnt){
+    ll left = cntzero;
+    
+    for(int i=0;i<=curonecnt;i++){
+        left = cntzero;
+        left -= pref[i];
+        left -= suff[curonecnt - i];
 
-bool check(string str){
-    int cnt = 0;
-    for(int i=0;i+tt.size()<=n;i++){
-        if(str.substr(i,tt.size()) == tt)cnt++;
+        if(left <= curonecnt)return true;
+        // left = cntzero;
     }
 
-    // cout << "cnt : " << cnt << endl;
-    return (cnt == 1);
+    return false;
 }
 
 void solve() {
@@ -241,36 +243,53 @@ void solve() {
   cin >> t;
   while (t--)
   {
-   cin >> n ;
+
    string s;
    cin >> s;
 
-   bool flag = true;
-   bool ans = false;
+   ll n = s.size();
+   ll cnt = 0;
 
-   for(int i=0;i+tt.size() <= n;i++){
-    string str = s;
-    flag = true;
-    for(int j=0;j<tt.size();j++){
-        if(str[i+j] != '?' && str[i+j] != tt[j]){
-            flag = false;
-            break;
-        }
-        str[i+j] = tt[j];
+   vector<ll> pref,suff;
+   for(int i=0;i<n;i++){
+    if(s[i] == '0'){
+        cnt++;
+    }else{
+        pref.push_back(cnt);
     }
+   }
 
-    if(flag and check(str)){
-        for(int j=0;j<n;j++){
-            if(str[j] == '?' )str[j] = 'z';
-        }
-        ans = true;
-        s = str;
-        break;
+   pref.push_back(cnt);
+
+   cnt = 0;
+   for(int i=n-1;i>=0;i--){
+    if(s[i] == '0'){
+        cnt++;
+    }else{
+        suff.push_back(cnt);
     }
-   } 
+   }
+   suff.push_back(cnt);
 
-   if(ans)cout << "YES" << endl << s << endl;
-   else cout << "NO" << endl;
+   ll cntone = 0, cntzero = 0;
+
+   for(char ch:s)cntzero += (ch == '0');
+   cntone = n - cntzero;
+
+
+   ll high = cntone, low = 0;
+   ll ans = high;
+
+   while(high >= low){
+    ll mid = (high+low)>>1;
+
+    if(checkpossible(cntzero,pref,suff,mid)){
+        high = mid-1;
+        ans = mid;
+    }else low = mid+1;
+   }
+
+   cout << ans << endl;
 
   }
 }

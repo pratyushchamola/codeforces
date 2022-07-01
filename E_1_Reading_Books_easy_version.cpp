@@ -9,7 +9,7 @@ using namespace chrono;
 #define fastio() ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL)
 #define MOD 1000000007
 #define MOD1 998244353
-#define INF 1e18
+// #define INF 1e9 + 1
 #define endl "\n"
 #define pb push_back
 #define ppb pop_back
@@ -76,203 +76,40 @@ void precision(int a) {cout << setprecision(a) << fixed;}
 
 
 
-#define int long long
+// #define int long long
 #define vl vector<int>
 #define vll vector<pair<int,int>>
 
-// Sieve
-int N = 1e6 + 7;
-vector<int> pr; // store all primes till N
-//vector<int> fcnt; // factor count of each number
-vector<bool> prime; // true for prime numbers
-vector<int> spf; // smallest prime factor
- 
-void sieve() {
-    prime.assign(N, true);
-    spf.resize(N);
-//    fcnt.resize(N);
- 
-    prime[1] = false;
-    for (int p = 2; p < N; p++) {
-        if (prime[p]) {
-            spf[p] = p;
-            for (int i = p + p; i <= N; i += p) {
-                prime[i] = false; // not prime
-                if (spf[i] == 0) {
-                    spf[i] = p; // first divisor of i
-                }
-            }
-        }
-    }
- 
-    // for (int p = 2; p <= N; p++) { // storing primes
-    //     if (prime[p]) {
-    //         pr.pb(p);
-    //     }
-    // }
-//
-//    for (int i = 2; i < N; ++i) { // counting factors of i
-//        fcnt[i] = fcnt[i / spf[i]] + 1;
-//    }
-//
-//    for (int i = 1; i < N; ++i) {
-//        fcnt[i] += fcnt[i - 1];
-//    }
-}
-
-long long inverse(long long i){
-    if(i==1) return 1;
-    return (MOD - ((MOD/i)*inverse(MOD%i))%MOD+MOD)%MOD;
-}
-
-vl fact(2e5 + 5,1);
-
-long long lcmcal(int a, int b, int curggcd) {
-    int temp = (a * b) % MOD;
-    // ll temp2 = gcd(a,b);
-
-    // return (int)(temp / curggcd);
-    return temp / curggcd;
-}
-
-struct DSU
-{
-    ll n;
-    vector<int> p;
-    vector<int> sz;
-    DSU(int N)
-    {
-        n = N;
-        p.assign(n + 1,-1);
-        sz.assign(n+1,1);
-        for (int i = 0;i<=n;i++)p[i] = i;
-    }
-    ll Find(int i)
-    {
-        if (p[i] == i)return i;
-        return p[i] = Find(p[i]);
-    }
-    void Merge(int a,int b)
-    {
-        a = Find(a),b = Find(b);
-        if (a != b)p[b] = a;
-    }
-int getSize(int x)
-    {
-        return sz[x] = sz[Find(x)];
-    }
-};
-
-int binPow(int a,int b)
-{
-    if (b == 0)return 1;
-    if (b == 1)return a;
-    ll ret = binPow(a,b/2);
-    if (b%2 == 0)return (ret * ret)%MOD;
-    return ((ret * ret)%MOD * a)%MOD;
-}
-
-int inv(int a)
-{
-    return (binPow(a,MOD - 2)%MOD + MOD)%MOD;
-}
-
-int binom(int a,int b)
-{
-    if (b < 0 or a < 0)return 0;
-    return (((fact[a] * inv(fact[b]))%MOD * inv(fact[a - b]))%MOD + MOD)%MOD;
-}
-
-ll moduloMultiplication(int a, int b)
-{
-    int res = 0; 
-    a %= MOD;
-
-    while (b)
-    {
-        if (b & 1)
-            res = (res + a) % MOD;
-
-        a = (2 * a) % MOD;
-
-        b >>= 1; // b = b / 2
-    }
-
-    return res;
-}
-
-
-long long power(int base, int n, int mod)
-{
-    long long ans = 1;
-    while (n != 0)
-    {
-        if (n & 1)
-        {
-            ans = (ans * base) % mod;
-            n = n - 1;
-        }
-        else
-        {
-            base = (base * base) % mod;
-            n = n / 2;
-        }
-    }
-    return ans;
-}
-
-string tt = "abacaba";
-ll n;
-
-bool check(string str){
-    int cnt = 0;
-    for(int i=0;i+tt.size()<=n;i++){
-        if(str.substr(i,tt.size()) == tt)cnt++;
-    }
-
-    // cout << "cnt : " << cnt << endl;
-    return (cnt == 1);
-}
+const int INF = 2e9 + 1;
 
 void solve() {
 
-  // for (int i = 1;i<=2e5;i++)fact[i] = (i * fact[i - 1])%MOD;
-  int t;
-  cin >> t;
-  while (t--)
-  {
-   cin >> n ;
-   string s;
-   cin >> s;
-
-   bool flag = true;
-   bool ans = false;
-
-   for(int i=0;i+tt.size() <= n;i++){
-    string str = s;
-    flag = true;
-    for(int j=0;j<tt.size();j++){
-        if(str[i+j] != '?' && str[i+j] != tt[j]){
-            flag = false;
-            break;
-        }
-        str[i+j] = tt[j];
-    }
-
-    if(flag and check(str)){
-        for(int j=0;j<n;j++){
-            if(str[j] == '?' )str[j] = 'z';
-        }
-        ans = true;
-        s = str;
-        break;
-    }
-   } 
-
-   if(ans)cout << "YES" << endl << s << endl;
-   else cout << "NO" << endl;
-
-  }
+    int n, k;
+	cin >> n >> k;
+	vector<int> times[4];
+	vector<int> sums[4];
+	for (int i = 0; i < n; ++i) {
+		int t, a, b;
+		cin >> t >> a >> b;
+		times[a * 2 + b].push_back(t);
+	}
+	for (int i = 0; i < 4; ++i) {
+		sort(times[i].begin(), times[i].end());
+		sums[i].push_back(0);
+		for (auto it : times[i]) {
+			sums[i].push_back(sums[i].back() + it);
+		}
+	}
+	
+	int ans = INF;
+	for (int cnt = 0; cnt < min(k + 1, (int)(sums[3].size())); ++cnt) {
+		if (k - cnt < (sums[1].size()) && k - cnt < (sums[2].size())) {
+			ans = min(ans, sums[3][cnt] + sums[1][k - cnt] + sums[2][k - cnt]);
+		}
+	}
+	
+	if (ans == INF) ans = -1;
+	cout << ans << endl;
 }
 
 int32_t main() {

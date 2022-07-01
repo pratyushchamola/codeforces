@@ -221,18 +221,6 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-string tt = "abacaba";
-ll n;
-
-bool check(string str){
-    int cnt = 0;
-    for(int i=0;i+tt.size()<=n;i++){
-        if(str.substr(i,tt.size()) == tt)cnt++;
-    }
-
-    // cout << "cnt : " << cnt << endl;
-    return (cnt == 1);
-}
 
 void solve() {
 
@@ -241,37 +229,40 @@ void solve() {
   cin >> t;
   while (t--)
   {
-   cin >> n ;
-   string s;
-   cin >> s;
+   ll n,m;
+   cin >> n >> m;
 
-   bool flag = true;
-   bool ans = false;
+   multiset<ll> left,top;
 
-   for(int i=0;i+tt.size() <= n;i++){
-    string str = s;
-    flag = true;
-    for(int j=0;j<tt.size();j++){
-        if(str[i+j] != '?' && str[i+j] != tt[j]){
-            flag = false;
-            break;
-        }
-        str[i+j] = tt[j];
-    }
+   vector<string> a(n);
 
-    if(flag and check(str)){
-        for(int j=0;j<n;j++){
-            if(str[j] == '?' )str[j] = 'z';
-        }
-        ans = true;
-        s = str;
-        break;
-    }
+   for(int i=0;i<n;i++){
+       cin >> a[i];
    } 
 
-   if(ans)cout << "YES" << endl << s << endl;
-   else cout << "NO" << endl;
+   for(int i=0;i<n;i++){
+       for(int j=0;j<a[i].size();j++){
+           if(a[i][j] == 'R'){
+               top.insert(i);
+               left.insert(j);
+           }
+       }
+   }
 
+   bool flag= false;
+   for(int i=0;i<n;i++){
+       for(int j=0;j<a[i].size();j++){
+           if(a[i][j] == 'R'){
+               if((*top.begin() >= i) and (*left.begin() >= j)){
+                   flag = true;
+                   break;
+               }
+           }
+       }
+   }
+
+   if(flag)cout << "YES" << endl;
+   else cout << "NO" << endl;
   }
 }
 

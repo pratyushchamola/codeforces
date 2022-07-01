@@ -221,18 +221,6 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-string tt = "abacaba";
-ll n;
-
-bool check(string str){
-    int cnt = 0;
-    for(int i=0;i+tt.size()<=n;i++){
-        if(str.substr(i,tt.size()) == tt)cnt++;
-    }
-
-    // cout << "cnt : " << cnt << endl;
-    return (cnt == 1);
-}
 
 void solve() {
 
@@ -241,37 +229,39 @@ void solve() {
   cin >> t;
   while (t--)
   {
-   cin >> n ;
-   string s;
-   cin >> s;
+   ll n,x,m;
+   cin >> n >> x >> m;
 
-   bool flag = true;
-   bool ans = false;
+   ll maxval = LLONG_MIN;
+   ll minval = LLONG_MAX;
 
-   for(int i=0;i+tt.size() <= n;i++){
-    string str = s;
-    flag = true;
-    for(int j=0;j<tt.size();j++){
-        if(str[i+j] != '?' && str[i+j] != tt[j]){
-            flag = false;
-            break;
-        }
-        str[i+j] = tt[j];
-    }
+   ll a,b;
+   bool flag = false;
+   for(int i=0;i<m;i++){
+       cin >> a >> b;
+       if(!flag){
+           if((a<= x) and (b>= x)){
+               flag = true;
+               maxval = max(maxval,b);
+               minval = min(minval,a);
+           }
+       }else{
+           if(minval >= a and maxval <= b){
+               minval = min(minval,a);
+               maxval = max(maxval,b);
+           }
+           else if(maxval >= a and maxval <= b){
+               minval = min(minval,a);
+               maxval = max(maxval,b);
+           }else if(minval >= a and minval <= b){
+               minval = min(minval,a);
+               maxval = max(maxval,b);
+           }
+       }
+   }
 
-    if(flag and check(str)){
-        for(int j=0;j<n;j++){
-            if(str[j] == '?' )str[j] = 'z';
-        }
-        ans = true;
-        s = str;
-        break;
-    }
-   } 
-
-   if(ans)cout << "YES" << endl << s << endl;
-   else cout << "NO" << endl;
-
+   if(maxval == LLONG_MIN or minval == LLONG_MAX)cout << 1 << endl;
+   else cout << abs(maxval - minval) +1 << endl; 
   }
 }
 

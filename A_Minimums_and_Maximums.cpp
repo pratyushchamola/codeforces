@@ -221,18 +221,6 @@ long long power(int base, int n, int mod)
     return ans;
 }
 
-string tt = "abacaba";
-ll n;
-
-bool check(string str){
-    int cnt = 0;
-    for(int i=0;i+tt.size()<=n;i++){
-        if(str.substr(i,tt.size()) == tt)cnt++;
-    }
-
-    // cout << "cnt : " << cnt << endl;
-    return (cnt == 1);
-}
 
 void solve() {
 
@@ -241,37 +229,27 @@ void solve() {
   cin >> t;
   while (t--)
   {
-   cin >> n ;
-   string s;
-   cin >> s;
+   ll l1,r1,l2,r2;
+   cin >> l1 >> r1 >> l2 >> r2;
 
-   bool flag = true;
-   bool ans = false;
+   ll minm = min(r1,r2);
+   ll maxm = max(l1,l2);
 
-   for(int i=0;i+tt.size() <= n;i++){
-    string str = s;
-    flag = true;
-    for(int j=0;j<tt.size();j++){
-        if(str[i+j] != '?' && str[i+j] != tt[j]){
-            flag = false;
-            break;
-        }
-        str[i+j] = tt[j];
-    }
+   if(minm >= maxm)cout << min(minm,maxm) << endl;
+   else{
+       cout << (min(l1,r1) + min(l2,r2)) << endl;
+   }
 
-    if(flag and check(str)){
-        for(int j=0;j<n;j++){
-            if(str[j] == '?' )str[j] = 'z';
-        }
-        ans = true;
-        s = str;
-        break;
-    }
-   } 
+    // ll ans = -1;
 
-   if(ans)cout << "YES" << endl << s << endl;
-   else cout << "NO" << endl;
+    // for(int i=1;i<=100;i++){
+    //     if(((maxm <= i) and (minm >= i))){
+    //         ans = i;
+    //         break;
+    //     }
+    // }
 
+    // cout << (ans == -1 ? (maxm+minm) : ans) << endl;
   }
 }
 
